@@ -1,10 +1,14 @@
 """
 Data mining Project
 
+<<<<<<< HEAD
 Contributors:
 Aviad Haviv ()
 Yossi Golan (yossigolan@gmail.com)
 
+=======
+#  123123123123123123
+>>>>>>> 64084d3ca56cd5ad87164fc201b9ba1c6a5a9b26
 """
 
 import requests
