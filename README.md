@@ -1,12 +1,13 @@
 # CMP-Mining : CoinMarketCap Data Mining Project
+Project by: Aviad Haviv & Yossi Golan (yossigolan@gmail.com)
 
 CMP-M is a data mining project, done on popular CoinMarketCap site, one of the most popular crypto-ecosystems sites.
 The project offers a method of mining data about crypot-coins which are listed on CMP.
 
 Right now the project is in develop and offers only some of its features.
 
-Features:
-- printing iformation and details for each coin listed in MCP. The information includes short info + statistics from it's (the coin) market and prices.
+### Features:
+- printing iformation and details for each coin listed in MCP. The information includes short info + statistics of the coin market including prices.
 
 ## Installation
 
@@ -20,13 +21,30 @@ pip install -r requirements.txt
 
 ## Usage
 
-Go to https://coinmarketcap.com/currencies/ and pick a coin to be mined, eg:bitcoin - https://coinmarketcap.com/currencies/bitcoin/.
-Edit the url in the code to be as your choice.
-Run it.
+Call the function get_coin_info(coin_name) with a coin name.
+Currently, the following coins are supported:
 
-```python
-r = requests.get("https://coinmarketcap.com/currencies/bitcoin/")
-```
+- bitcoin
+- ethereum
+- tether
+- binance-coin
+- cardano
+- dogecoin
+- xrp
+- usd-coin
+- polkadot-new
+- uniswap
+- litecoin
+- solana
+- theta
+
+### How the function works?
+
+First it will create the url out of https://coinmarketcap.com/currencies/ and add the coin name to it. 
+eg:bitcoin - https://coinmarketcap.com/currencies/bitcoin/.
+
+Then it will scrap the information on the page and display it on the screen.
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
