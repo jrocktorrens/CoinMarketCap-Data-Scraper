@@ -1,14 +1,11 @@
 """
 Data mining Project
 
-<<<<<<< HEAD
+
 Contributors:
 Aviad Haviv ()
 Yossi Golan (yossigolan@gmail.com)
 
-=======
-#  123123123123123123
->>>>>>> 64084d3ca56cd5ad87164fc201b9ba1c6a5a9b26
 """
 
 import requests
@@ -74,4 +71,4 @@ def get_coin_info(coin_name):
 
 
 if __name__ == '__main__':
-    get_coin_info('ethereum')
+    get_coin_info('bitcoin')
