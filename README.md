@@ -1,5 +1,5 @@
 # CMP-Mining : CoinMarketCap Data Mining Project
-Project by: Aviad Haviv & Yossi Golan (yossigolan@gmail.com)
+Project by: Aviad (rikicodes@gmail.com) & Yossi Golan (yossigolan@gmail.com)
 
 CMP-M is a data mining project, done on popular CoinMarketCap site, one of the most popular crypto-ecosystems sites.
 The project offers a method of mining data about crypot-coins which are listed on CMP.
