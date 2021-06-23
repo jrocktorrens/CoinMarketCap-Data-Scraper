@@ -3,7 +3,7 @@ Data mining Project
 
 
 Contributors:
-Aviad Haviv ()
+Aviad Haviv (rikicodes@gmail.com)
 Yossi Golan (yossigolan@gmail.com)
 
 """
@@ -34,9 +34,8 @@ def get_coin_info(coin_name):
         print(f"Something on the website went wrong reading {coin_name} information.")
         print("Please try again later...")
 
-
     print("\n", f"Here is the latest price statistics of {coin_name}:")
-    print(f"---------------------------------------" + '-'*(len(coin_name)+1))
+    print(f"---------------------------------------" + '-' * (len(coin_name) + 1))
 
     # Get all divs that contain coin statistics
     try:
@@ -53,14 +52,14 @@ def get_coin_info(coin_name):
                 div_counter += 1
 
         print("\n", f"Here is a live data summery of {coin_name}:")
-        print(f"-------------------------------------" + '-'*(len(coin_name)+1))
+        print(f"-------------------------------------" + '-' * (len(coin_name) + 1))
 
         # Get updated coin information summary
         coin_text = soup.find('div', class_='sc-16r8icm-0 coDTMj')
         print(coin_text.find('div', class_='about___1OuKY').div.div.p.text)
 
         print("\n", f"What is {coin_name}?")
-        print(f"--------------" + '-'*(len(coin_name)+1))
+        print(f"--------------" + '-' * (len(coin_name) + 1))
 
         # Get 'What is' coin information that includes coin history and all related information.
         for p in coin_text.find('div', class_='about___1OuKY').div.div.div.div:
