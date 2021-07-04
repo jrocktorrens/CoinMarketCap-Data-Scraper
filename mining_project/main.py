@@ -14,6 +14,11 @@ from bs4 import BeautifulSoup
 SITE_URL = "https://coinmarketcap.com/currencies/"
 
 
+def print_coin_headline(pre_message, post_message, coin_name):
+    print("\n", pre_message + ' ' + coin_name + ' ' + post_message)
+    print("-"*(len(pre_message) + len(post_message)) + '-' * (len(coin_name) + 1))
+
+
 def get_coin_info(coin_name):
     """
     Scrap all the information of a crypto coin
@@ -34,8 +39,7 @@ def get_coin_info(coin_name):
         print(f"Something on the website went wrong reading {coin_name} information.")
         print("Please try again later...")
 
-    print("\n", f"Here is the latest price statistics of {coin_name}:")
-    print(f"---------------------------------------" + '-' * (len(coin_name) + 1))
+    print_coin_headline("\nHere is the latest price statistics of", ":", coin_name)
 
     # Get all divs that contain coin statistics
     try:
@@ -51,22 +55,25 @@ def get_coin_info(coin_name):
                         print(table_key, table_value)
                 div_counter += 1
 
-        print("\n", f"Here is a live data summery of {coin_name}:")
-        print(f"-------------------------------------" + '-' * (len(coin_name) + 1))
+        print_coin_headline("\nHere is a live data summery of", ":", coin_name)
 
         # Get updated coin information summary
+        # about___1OuKY
         coin_text = soup.find('div', class_='sc-16r8icm-0 coDTMj')
-        print(coin_text.find('div', class_='about___1OuKY').div.div.p.text)
+        print(coin_text.find('div', class_='sc-16r8icm-0 sc-19zk94m-3 bmiOME').div.div.p.text)
 
-        print("\n", f"What is {coin_name}?")
-        print(f"--------------" + '-' * (len(coin_name) + 1))
+        print_coin_headline("\nWhat is", "?", coin_name)
 
         # Get 'What is' coin information that includes coin history and all related information.
-        for p in coin_text.find('div', class_='about___1OuKY').div.div.div.div:
+        for p in coin_text.find('div', class_='sc-16r8icm-0 sc-19zk94m-3 bmiOME').div.div.div.div:
             print(p.text)
     except ConnectionError:
         print(f"Can't read {coin_name} information.")
         print("Please try again later...")
+
+
+def main():
+    pass
 
 
 if __name__ == '__main__':
