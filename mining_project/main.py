@@ -58,7 +58,6 @@ def get_coin_info(coin_name):
         print_coin_headline("\nHere is a live data summery of", ":", coin_name)
 
         # Get updated coin information summary
-        # about___1OuKY
         coin_text = soup.find('div', class_='sc-16r8icm-0 coDTMj')
         print(coin_text.find('div', class_='sc-16r8icm-0 sc-19zk94m-3 bmiOME').div.div.p.text)
 
