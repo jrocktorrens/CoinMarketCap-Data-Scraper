@@ -43,17 +43,18 @@ def get_coin_info(coin_name):
 
     # Get all divs that contain coin statistics
     try:
+        # Get first 4 tables
         price_statistics = soup.find_all('div', class_='sc-16r8icm-0 dxttqv')
         div_counter = 0
-        for div in price_statistics:
-            # Get first 4 tables
-            if div_counter <= 4:
-                for table in div:
-                    for tr in table.tbody:
-                        table_key = tr.th.text
-                        table_value = tr.td.text
-                        print(table_key, table_value)
-                div_counter += 1
+        for item in price_statistics:
+            coin_info = item.find('table').find('tbody').find_all('tr')
+            for row in coin_info:
+                table_key = row.contents[0].text
+                table_value = row.contents[1].text
+                print(table_key, table_value)
+            div_counter += 1
+            if div_counter == 4:
+                break
 
         print_coin_headline("\nHere is a live data summery of", ":", coin_name)
 
