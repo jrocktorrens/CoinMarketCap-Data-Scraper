@@ -45,65 +45,65 @@ eg:bitcoin - https://coinmarketcap.com/currencies/bitcoin/.
 
 Then it will scrap the information on the page and display it on the screen.
 
-### DB Documentation
+## DB Documentation
 
-## ERD:
+### ERD:
 
 ![alt text](https://github.com/yossigolan/data-mining-project/blob/yossi_branch/MiningProject%20.png?raw=true)
 
 DataBase name: crypto
 
 Table coins include these columns:
-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
-                   "name VARCHAR,"
+-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
+-                   "name VARCHAR,"
                    
 Table coin_price_today include these columns:
-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
-                   "coin_id INT," 
-                   "price FLOAT," 
-                   "price_change FLOAT," 
-                   "low FLOAT," 
-                   "high FLOAT," 
-                   "volume FLOAT," 
-                   "volume_market_cap FLOAT," 
-                   "market_dominance FLOAT," 
-                   "market_cap FLOAT," 
-                   "fully_diluted_market_cap FLOAT," 
-                   "rank INT," 
-                   "data_summery VARCHAR," 
+-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
+-                   "coin_id INT," 
+-                   "price FLOAT," 
+-                   "price_change FLOAT," 
+-                   "low FLOAT," 
+-                   "high FLOAT," 
+-                   "volume FLOAT," 
+-                   "volume_market_cap FLOAT," 
+-                   "market_dominance FLOAT," 
+-                   "market_cap FLOAT," 
+-                   "fully_diluted_market_cap FLOAT," 
+-                   "rank INT," 
+-                   "data_summery VARCHAR," 
                    
 Table coin_price_yesterday include these columns:
-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
-                   "coin_id INT," 
-                   "price FLOAT," 
-                   "low FLOAT," 
-                   "high FLOAT," 
-                   "open FLOAT," 
-                   "close FLOAT," 
-                   "change FLOAT," 
-                   "volume FLOAT,"              
+-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
+-                   "coin_id INT," 
+-                   "price FLOAT," 
+-                   "low FLOAT," 
+-                   "high FLOAT," 
+-                   "open FLOAT," 
+-                   "close FLOAT," 
+-                   "change FLOAT," 
+-                   "volume FLOAT,"              
 
 Table coin_price_history include these columns:
-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
-                   "coin_id INT," 
-                   "7d_low FLOAT," 
-                   "7d_high FLOAT," 
-                   "30d_low FLOAT," 
-                   "30d_high FLOAT," 
-                   "90d_low FLOAT," 
-                   "90d_high FLOAT," 
-                   "52w_low FLOAT," 
-                   "52w_high FLOAT," 
-                   "all_time_low FLOAT," 
-                   "all_time_high FLOAT," 
-                   "roi FLOAT," 
-                   "circulating_supply INT," 
-                   "total_supply INT," 
-                   "max_supply INT," 
+-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
+-                   "coin_id INT," 
+-                   "7d_low FLOAT," 
+-                   "7d_high FLOAT," 
+-                   "30d_low FLOAT," 
+-                   "30d_high FLOAT," 
+-                   "90d_low FLOAT," 
+-                   "90d_high FLOAT," 
+-                   "52w_low FLOAT," 
+-                   "52w_high FLOAT," 
+-                   "all_time_low FLOAT," 
+-                   "all_time_high FLOAT," 
+-                   "roi FLOAT," 
+-                   "circulating_supply INT," 
+-                   "total_supply INT," 
+-                   "max_supply INT," 
 
 Table coin_information include these columns:
-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
-                   "info VARCHAR," 
+-                   "id INT AUTO_INCREMENT PRIMARY KEY," 
+-                   "info VARCHAR," 
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
