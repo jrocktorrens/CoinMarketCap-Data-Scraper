@@ -45,6 +45,12 @@ eg:bitcoin - https://coinmarketcap.com/currencies/bitcoin/.
 
 Then it will scrap the information on the page and display it on the screen.
 
+### DB Documentation
+
+## ERD:
+
+![alt text](https://github.com/yossigolan/data-mining-project/blob/yossi_branch/MiningProject.png?raw=true)
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
