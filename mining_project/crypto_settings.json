@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "settings": {
+  "SITE_URL": "https://coinmarketcap.com/currencies/"
+  },
+  "sql": {
+    "database": "crypto",
+    "port": 8080
+  },
+  "coins": {
+    "bitcoin": 1,
+    "ethereum": 2,
+    "tether": 3,
+    "binance-coin": 4,
+    "cardano": 5,
+    "dogecoin": 6,
+    "xrp": 7,
+    "usd-coin": 8,
+    "polkadot-new": 9,
+    "uniswap": 10,
+    "litecoin": 11,
+    "solana": 12,
+    "theta": 13
+  },
+  "mining_tag": {
+    "main_div": "sc-16r8icm-0 dxttqv",
+    "coin_info_main": "sc-16r8icm-0 coDTMj",
+    "coin_info_second": "sc-16r8icm-0 sc-19zk94m-3 bmiOME",
+    "coin_about": "sc-16r8icm-0 sc-19zk94m-3 bmiOME"
+  }
+}

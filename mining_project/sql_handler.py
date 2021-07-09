@@ -18,7 +18,7 @@ def run_sql(database, mysql_statement):
 def setup_coins_table():
     sql_sentence = "CREATE TABLE IF NOT EXISTS coins (" \
                    "id INT AUTO_INCREMENT PRIMARY KEY," \
-                   "name VARCHAR," \
+                   "name VARCHAR(20)" \
                    ");"
     run_sql('crypto', sql_sentence)
 
@@ -36,8 +36,8 @@ def setup_coin_price_today_table():
                    "market_dominance FLOAT," \
                    "market_cap FLOAT," \
                    "fully_diluted_market_cap FLOAT," \
-                   "rank INT," \
-                   "data_summery VARCHAR," \
+                   "coin_rank INT," \
+                   "data_summery VARCHAR(256)" \
                    ");"
     run_sql('crypto', sql_sentence)
     sql_sentence = "ALTER TABLE `coin_price_today` " \
@@ -55,8 +55,8 @@ def setup_coin_price_yesterday_table():
                    "high FLOAT," \
                    "open FLOAT," \
                    "close FLOAT," \
-                   "change FLOAT," \
-                   "volume FLOAT," \
+                   "coin_change FLOAT," \
+                   "volume FLOAT" \
                    ");"
     run_sql('crypto', sql_sentence)
     sql_sentence = "ALTER TABLE `coin_price_yesterday` " \
@@ -82,7 +82,7 @@ def setup_coin_price_history_table():
                    "roi FLOAT," \
                    "circulating_supply INT," \
                    "total_supply INT," \
-                   "max_supply INT," \
+                   "max_supply INT" \
                    ");"
     run_sql('crypto', sql_sentence)
     sql_sentence = "ALTER TABLE `coin_price_history` " \
@@ -93,8 +93,8 @@ def setup_coin_price_history_table():
 
 def setup_coin_information():
     sql_sentence = "CREATE TABLE IF NOT EXISTS coin_information (" \
-                   "id INT AUTO_INCREMENT PRIMARY KEY," \
-                   "info VARCHAR," \
+                   "coin_id INT AUTO_INCREMENT PRIMARY KEY," \
+                   "info VARCHAR(1000)" \
                    ");"
     run_sql('crypto', sql_sentence)
     sql_sentence = "ALTER TABLE `coin_information` " \
@@ -155,7 +155,7 @@ def update_coin_price_today_table(info_list):
                             "market_dominance" \
                             "market_cap" \
                             "fully_diluted_market_cap" \
-                            "rank" \
+                            "coin_rank" \
                             "data_summery" \
                             ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
             cursor.execute(sql_statement, (info_list[0], info_list[1], info_list[2], info_list[3],
@@ -180,7 +180,7 @@ def update_coin_price_yesterday_table(info_list):
                             "high" \
                             "open" \
                             "close" \
-                            "change" \
+                            "coin_change" \
                             "volume" \
                             ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
             cursor.execute(sql_statement, (info_list[0], info_list[1], info_list[2], info_list[3],
