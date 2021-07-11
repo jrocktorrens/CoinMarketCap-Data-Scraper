@@ -7,7 +7,7 @@ The project offers a method of mining data about crypot-coins which are listed o
 Right now the project is in develop and offers only some of its features.
 
 ### Features:
-- printing iformation and details for each coin listed in MCP. The information includes short info + statistics of the coin market including prices.
+- printing information and details for each coin listed in MCP. The information includes short info + statistics of the coin market including prices.
 
 ## Installation
 
