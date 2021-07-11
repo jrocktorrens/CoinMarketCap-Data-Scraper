@@ -100,8 +100,8 @@
       "max_supply": "max_supply"
     },
     "attribute_general": {
-    "today_data_summary": "info",
-    "coin_about": "about"
+    "info": "coin info",
+    "about": "coin about"
   },
     "value_sign": {
     "coin_id": "$",
