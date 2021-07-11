@@ -1,7 +1,17 @@
+"""
+Handel the settings file
 
+"""
 
 class Configuration(dict):
+    """
+    Represents the settings file as a dictionary
+    """
     def __init__(self, *args):
+        """
+        Initialize class
+        :param args: a dictionary
+        """
         super(Configuration, self).__init__()
 
         for arg in args:
@@ -10,6 +20,11 @@ class Configuration(dict):
                 self.__setattr__(key, value)
 
     def __getattr__(self, attr):
+        """
+        Get item
+        :param attr:
+        :return:
+        """
         return self.get(attr)
 
     def __setattr__(self, key, value):

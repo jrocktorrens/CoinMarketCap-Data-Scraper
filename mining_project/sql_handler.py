@@ -2,6 +2,12 @@ import pymysql.cursors
 
 
 def run_sql(database, mysql_statement):
+    """
+    Run sql statement
+    :param database: database name
+    :param mysql_statement: the sql statement to run
+    :return: sql statement output
+    """
     connection = pymysql.connect(host='localhost',
                                  user='root',
                                  password='root',
@@ -15,7 +21,11 @@ def run_sql(database, mysql_statement):
             return cursor.fetchall()
 
 
-def setup_coins_table():
+def setup_coins_table(database):
+    """
+    Create the coins table if not exist
+    :return: nothing
+    """
     sql_sentence = "CREATE TABLE IF NOT EXISTS coins (" \
                    "coin_id INT PRIMARY KEY," \
                    "name TEXT" \
@@ -23,7 +33,11 @@ def setup_coins_table():
     run_sql('crypto', sql_sentence)
 
 
-def setup_coin_price_today_table():
+def setup_coin_price_today_table(database):
+    """
+    Create today's coin price table
+    :return: nothing
+    """
     sql_sentence = "CREATE TABLE IF NOT EXISTS coin_price_today (" \
                    "id INT AUTO_INCREMENT PRIMARY KEY," \
                    "coin_id INT," \
@@ -59,7 +73,11 @@ def setup_coin_price_today_table():
     run_sql('crypto', sql_sentence)
 
 
-def setup_coin_price_yesterday_table():
+def setup_coin_price_yesterday_table(database):
+    """
+    Create yesterday's coin price table
+    :return: nothing
+    """
     try:
         sql_sentence = "CREATE TABLE IF NOT EXISTS coin_price_yesterday (" \
                        "id INT AUTO_INCREMENT PRIMARY KEY," \
@@ -90,7 +108,11 @@ def setup_coin_price_yesterday_table():
         print(f"Error")
 
 
-def setup_coin_price_history_table():
+def setup_coin_price_history_table(database):
+    """
+    Create price history table
+    :return: nothing
+    """
     sql_sentence = "CREATE TABLE IF NOT EXISTS coin_price_history (" \
                    "id INT AUTO_INCREMENT PRIMARY KEY," \
                    "coin_id INT," \
@@ -124,7 +146,11 @@ def setup_coin_price_history_table():
     run_sql('crypto', sql_sentence)
 
 
-def setup_coin_information():
+def setup_coin_information(database):
+    """
+    Create coin information table
+    :return: nothing
+    """
     sql_sentence = "CREATE TABLE IF NOT EXISTS coin_information (" \
                    "coin_id INT AUTO_INCREMENT PRIMARY KEY," \
                    "info TEXT" \
@@ -140,22 +166,29 @@ def setup_coin_information():
     run_sql('crypto', sql_sentence)
 
 
-def setup_sql_database():
+def setup_sql_database(database):
     """
-    Setup sql database on first run
+    Setup sql database if not exist
+    and then create all tables
     :return: nothing
     """
     sql_sentence = "CREATE DATABASE IF NOT EXISTS crypto;"
     run_sql(None, sql_sentence)
 
-    setup_coins_table()
-    setup_coin_information()
-    setup_coin_price_today_table()
-    setup_coin_price_yesterday_table()
-    setup_coin_price_history_table()
+    setup_coins_table(database)
+    setup_coin_information(database)
+    setup_coin_price_today_table(database)
+    setup_coin_price_yesterday_table(database)
+    setup_coin_price_history_table(database)
 
 
 def update_coins_table(coin_id, coin_name):
+    """
+    Insert a record to coins table
+    :param coin_id: coin id
+    :param coin_name: coin name
+    :return: nothing
+    """
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -177,6 +210,12 @@ def update_coins_table(coin_id, coin_name):
 
 
 def update_coin_price_today_table(current_data, conf):
+    """
+    Insert a record to today's coin price table
+    :param current_data: data to insert
+    :param conf: settings file
+    :return: nothing
+    """
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "settings": {
-  "SITE_URL": "https://coinmarketcap.com/currencies/"
+    "SITE_URL": "https://coinmarketcap.com/currencies/"
   },
   "sql": {
     "database": "crypto",
@@ -62,5 +62,12 @@
     "history_total_supply": "total supply",
     "history_max_supply": "max supply",
     "coin_about": "coin about"
+  },
+  "error_msg": {
+    "err_web_connection": "Something went wrong reading coin information. \nPlease try again later...",
+    "err_coin_not_supported": "Error! This coin is not supported!",
+    "err_no_settings_file": "Error! Can't find settings file!",
+    "err_general": "Error! Something went wrong..."
+
   }
 }
