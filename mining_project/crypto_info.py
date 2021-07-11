@@ -28,7 +28,6 @@ except FileNotFoundError as ex:
     print(f"Error! Can't find settings file! \n{ex}")
     exit(0)
 
-
 sql_handler.setup_sql_database(conf.sql.database)
 coin_data = {}
 
