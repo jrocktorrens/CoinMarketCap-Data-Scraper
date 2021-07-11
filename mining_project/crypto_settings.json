@@ -74,7 +74,7 @@
       "rank": "market rank",
       "cap": "market cap",
       "fully_diluted_market_cap": "fully diluted market cap"
-    },
+  },
     "attribute_yesterday": {
       "low": "yesterday's low",
       "high": "high",
@@ -82,7 +82,7 @@
       "close": "close",
       "change": "yesterday's change",
       "volume": "yesterday's volume"
-    },
+  },
       "attribute_history": {
       "7d_low": "7d low",
       "7d_high": "7d high",
@@ -98,51 +98,49 @@
       "circulating_supply": "circulating_supply",
       "total_supply": "total_supply",
       "max_supply": "max_supply"
-    },
+  },
     "attribute_general": {
     "info": "coin info",
     "about": "coin about"
   },
-    "value_sign": {
-    "coin_id": "$",
-    "today_price": "$",
-    "today_price_change": "$",
-    "today_low": "$",
-    "today_high": "$",
-    "today_volume": "$",
-    "today_volume_market_cap": "",
-    "today_market_dominance": "",
-    "today_market_rank": "#",
-    "today_market_cap": "$",
-    "today_fully_diluted_market_cap": "$",
-    "today_data_summary": "",
-    "yesterday_low": "$",
-    "yesterday_high": "$",
-    "yesterday_open": "$",
-    "yesterday_close": "$",
-    "yesterday_change": "%",
-    "yesterday_volume": "$",
-    "history_7d_low": "$",
-    "history_7d_high": "$",
-    "history_30d_low": "$",
-    "history_30d_high": "$",
-    "history_90d_low": "$",
-    "history_90d_high": "$",
-    "history_52w_low": "$",
-    "history_52w_high": "$",
-    "history_all_time_low": "$",
-    "history_all_time_high": "v",
-    "history_roi": "%",
-    "history_circulating_supply": "",
-    "history_total_supply": "",
-    "history_max_supply": "",
-    "coin_about": ""
+      "today_value_sign": {
+        "price": "$",
+        "price_change": "$",
+        "low": "$",
+        "high": "$",
+        "volume": "$",
+        "volume_market_cap": "",
+        "market_dominance": "",
+        "rank": "#",
+        "cap": "$",
+        "fully_diluted_market_cap": "$"
+  },
+    "yesterday_value_sign": {
+    "low": "$",
+    "high": "$",
+    "open": "$",
+    "close": "$",
+    "change": "%",
+    "volume": "$"
+  },
+    "history_value_sign": {
+    "7d_low": "$",
+    "7d_high": "$",
+    "30d_low": "$",
+    "30d_high": "$",
+    "90d_low": "$",
+    "90d_high": "$",
+    "52w_low": "$",
+    "52w_high": "$",
+    "all_time_low": "$",
+    "all_time_high": "v",
+    "roi": "%"
   },
   "error_msg": {
     "err_web_connection": "Something went wrong reading coin information. \nPlease try again later...",
     "err_coin_not_supported": "Error! This coin is not supported!",
     "err_no_settings_file": "Error! Can't find settings file!",
-    "err_general": "Error! Something went wrong..."
-
+    "err_general": "Error! Something went wrong...",
+    "err_arguments": "Error! Wrong argument..."
   }
 }

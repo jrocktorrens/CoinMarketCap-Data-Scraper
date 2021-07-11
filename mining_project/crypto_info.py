@@ -63,11 +63,11 @@ def parse_two_words(titles, data):
     table_key = titles[0].lower().strip()
     table_value = data[0].contents[0]
     coin_data[table_key] = clean_value(table_value)
-    print(table_key, table_value)
+    # print(table_key, table_value)
     table_key = titles[1].lower().strip()
     table_value = data[1].contents[0]
     coin_data[table_key] = clean_value(table_value)
-    print(table_key, table_value)
+    # print(table_key, table_value)
 
 
 def parse_span(row):
@@ -79,7 +79,7 @@ def parse_span(row):
     table_key = row.contents[0].text.lower().strip()
     table_value = row.contents[1].find('span').contents[0]
     coin_data[table_key] = clean_value(table_value)
-    print(table_key, table_value)
+    # print(table_key, table_value)
 
 
 def parse_word(row, coin_name):
@@ -92,7 +92,7 @@ def parse_word(row, coin_name):
     table_key = row.contents[0].text.lower().replace(coin_name.replace('-', ' '), '').strip()
     table_value = row.contents[1].text
     coin_data[table_key] = clean_value(table_value)
-    print(table_key, table_value)
+    # print(table_key, table_value)
 
 
 def get_coin_information(coin_text):
@@ -103,7 +103,7 @@ def get_coin_information(coin_text):
     """
     coin_data[conf.table_key.today_data_summary] = \
         coin_text.find('div', class_=conf.mining_tag.coin_info_second).div.div.p.text
-    print(coin_data[conf.table_key.today_data_summary])
+    # print(coin_data[conf.table_key.today_data_summary])
 
 
 def get_coin_about(coin_text, coin_name):
@@ -113,11 +113,11 @@ def get_coin_about(coin_text, coin_name):
     :param coin_name: coin name
     :return: nothing
     """
-    print_coin_headline("\nWhat is", "?", coin_name)
+    # print_coin_headline("\nWhat is", "?", coin_name)
     coin_data[conf.table_key.coin_about] = ''
     for about_info in coin_text.find('div', class_=conf.mining_tag.coin_about).div.div.div.div:
-        coin_data[conf.table_key.coin_about] += about_info.text + '\n'
-        print(about_info.text)
+        coin_data[conf.table_key.coin_about] += about_info.text + '\n\n '
+        # print(about_info.text)
 
 
 def update_sql_tables():
@@ -149,7 +149,7 @@ def get_coin_info(coin_name):
         r = requests.get(conf.settings.SITE_URL + coin_name + "/")
         soup = BeautifulSoup(r.text, 'html.parser')
 
-        print_coin_headline("\nHere is the latest price statistics of", ":", coin_name)
+        # print_coin_headline("\nHere is the latest price statistics of", ":", coin_name)
 
         # Get all divs that contain coin statistics
         coin_data[conf.table_key.coin_id] = conf.coins[coin_name]
@@ -172,7 +172,7 @@ def get_coin_info(coin_name):
             if div_counter == 4:
                 break
 
-        print_coin_headline("\nHere is a live data summery of", ":", coin_name)
+        # print_coin_headline("\nHere is a live data summery of", ":", coin_name)
 
         # Get updated coin information summary
         coin_text = soup.find('div', class_=conf.mining_tag.coin_info_main)
@@ -191,9 +191,3 @@ def get_coin_info(coin_name):
         print(conf.error_msg.err_web_connection + f"\n({err})")
 
 
-# def main():
-#     pass
-
-
-# if __name__ == '__main__':
-#     get_coin_info('bitcoin')

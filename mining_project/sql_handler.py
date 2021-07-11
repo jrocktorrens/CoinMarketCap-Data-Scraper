@@ -206,8 +206,8 @@ def update_coins_table(coin_id, coin_name):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError as ex:
-        print("Coin Duplicate error!")
-
+        # print("Coin Duplicate error!")
+        pass
 
 def update_coin_price_today_table(current_data, conf):
     """
@@ -254,7 +254,8 @@ def update_coin_price_today_table(current_data, conf):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError as ex:
-        print("Coin price today Duplicate error!")
+        # print("Coin price today Duplicate error!")
+        pass
 
 
 def update_coin_price_yesterday_table(current_data, conf):
@@ -286,7 +287,8 @@ def update_coin_price_yesterday_table(current_data, conf):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError as ex:
-        print("Coin price yesterday Duplicate error!")
+        # print("Coin price yesterday Duplicate error!")
+        pass
 
 
 def update_coin_price_history_table(current_data, conf):
@@ -323,7 +325,8 @@ def update_coin_price_history_table(current_data, conf):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError as ex:
-        print("Coin price history Duplicate error!")
+        # print("Coin price history Duplicate error!")
+        pass
 
 
 def update_coin_information_table(current_data, conf):
@@ -344,4 +347,5 @@ def update_coin_information_table(current_data, conf):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError as ex:
-        print("Coin information Duplicate error!")
+        # print("Coin information Duplicate error!")
+        pass
