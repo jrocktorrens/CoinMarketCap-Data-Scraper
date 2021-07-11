@@ -192,9 +192,9 @@ def get_coin_info(coin_name):
         print(conf.error_msg.err_web_connection + f"\n({err})")
 
 
-def main():
-    pass
+# def main():
+#     pass
 
 
-if __name__ == '__main__':
-    get_coin_info('bitcoin')
+# if __name__ == '__main__':
+#     get_coin_info('bitcoin')

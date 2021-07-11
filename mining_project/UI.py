@@ -1,8 +1,9 @@
 import argparse
+import crypto_info
 
 
 def is_coin_exist(coin_name):
-    result = main_file.sql_exist(coin_name)  #True\False
+    result = coin_name in crypto_info.conf.coins  #True\False
     return result
 
 
@@ -14,19 +15,16 @@ def general(coin_name, attribute):
     return main_file.sql_general(coin_name, attribute)
 
 
-def today(coin_name, attribute):
-    attribute_list = ['price', 'price_change', 'low', 'high', 'volume', 'volume_market_cap',
-                      'market_dominance', 'market_cap', 'fully_diluted_market_cap', 'rank', 'data_summery']
-    if attribute not in attribute_list:
+def today(attribute):
+    if attribute not in crypto_info.conf.attribute[1:11]:
         raise Exception(f'{attribute} not in the list of options')
-    return main_file.sql_online(coin_name, attribute)
-
-
+    return crypto_info.conf.attribute[attribute]
+#
 def yesterday(coin_name, attribute):
     attribute_list = ['price', 'low', 'high', 'open', 'close', 'change', 'volume']
     if attribute not in attribute_list:
         raise Exception(f'{attribute} not in the list of options')
-    return main_file.sql_yesterday(coin_name, attribute)
+    # return conf.value_sign.{attribute} + coin_data[conf.table_key.attribute]
 
 
 def history(coin_name, attribute):
@@ -43,7 +41,7 @@ def main():
                               help='in which coin are you interested?', )
     cmp_scraping.add_argument('table', type=str, metavar='<data table>', help='specify the table you are looking for '
                                                                               'from the options:',
-                              choices=['general', 'online', 'yesterday', 'history'])
+                              choices=['general', 'today', 'yesterday', 'history'])
     cmp_scraping.add_argument('attribute', type=str, metavar='<attribute>', help='wanted attribute to be shown')
     # cmp_scraping.add_argument('-w', help='display good morning message', action='store_true')
 
@@ -55,8 +53,10 @@ def main():
     # if args.w:
     #     print('good morning :)')
 
-    if not is_coin_exist(coin_name):
-        raise Exception(f'{coin_name} is not in a valid coin in coin market cap')
+    # if not is_coin_exist(coin_name):
+    #     raise Exception(f'{coin_name} is not in a valid coin in coin market cap')
+
+    crypto_info.get_coin_info(coin_name)
 
     table_map = {'information': information,
                  'general': general,
@@ -64,7 +64,7 @@ def main():
                  'yesterday': yesterday,
                  'history': history}
 
-    print(table_map[tables](coin_name, attribute))
+    print(table_map[tables](attribute))
 
 
 if __name__ == "__main__":
