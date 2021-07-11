@@ -30,7 +30,7 @@ def setup_coins_table(database):
                    "coin_id INT PRIMARY KEY," \
                    "name TEXT" \
                    ");"
-    run_sql('crypto', sql_sentence)
+    run_sql(database, sql_sentence)
 
 
 def setup_coin_price_today_table(database):
@@ -53,7 +53,7 @@ def setup_coin_price_today_table(database):
                    "market_rank INT," \
                    "data_summery TEXT" \
                    ");"
-    run_sql('crypto', sql_sentence)
+    run_sql(database, sql_sentence)
     sql_sentence = "ALTER TABLE `coin_price_today` " \
                    "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
                    " `coins` (`coin_id`);"
@@ -89,11 +89,11 @@ def setup_coin_price_yesterday_table(database):
                        "coin_change FLOAT UNIQUE," \
                        "volume FLOAT UNIQUE" \
                        ");"
-        run_sql('crypto', sql_sentence)
+        run_sql(database, sql_sentence)
         sql_sentence = "ALTER TABLE `coin_price_yesterday` " \
                        "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
                        " `coins` (`coin_id`);"
-        run_sql('crypto', sql_sentence)
+        run_sql(database, sql_sentence)
         sql_sentence = "ALTER TABLE coin_price_yesterday ADD UNIQUE ("\
                        "coin_id," \
                        "low," \
@@ -103,7 +103,7 @@ def setup_coin_price_yesterday_table(database):
                        "coin_change," \
                        "volume" \
                        ");"
-        run_sql('crypto', sql_sentence)
+        run_sql(database, sql_sentence)
     except Exception as ex:
         print(f"Error")
 
@@ -126,11 +126,11 @@ def setup_coin_price_history_table(database):
                    "52w_high FLOAT," \
                    "roi FLOAT" \
                    ");"
-    run_sql('crypto', sql_sentence)
+    run_sql(database, sql_sentence)
     sql_sentence = "ALTER TABLE `coin_price_history` " \
                    "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
                    " `coins` (`coin_id`);"
-    run_sql('crypto', sql_sentence)
+    run_sql(database, sql_sentence)
     sql_sentence = "ALTER TABLE coin_price_history ADD UNIQUE (" \
                    "coin_id," \
                    "7d_low," \
@@ -143,7 +143,7 @@ def setup_coin_price_history_table(database):
                    "52w_high," \
                    "roi" \
                    ");"
-    run_sql('crypto', sql_sentence)
+    run_sql(database, sql_sentence)
 
 
 def setup_coin_information(database):
@@ -155,15 +155,15 @@ def setup_coin_information(database):
                    "coin_id INT AUTO_INCREMENT PRIMARY KEY," \
                    "info TEXT" \
                    ");"
-    run_sql('crypto', sql_sentence)
+    run_sql(database, sql_sentence)
     sql_sentence = "ALTER TABLE `coin_information` " \
                    "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
                    " `coins` (`coin_id`);"
-    run_sql('crypto', sql_sentence)
+    run_sql(database, sql_sentence)
     sql_sentence = "ALTER TABLE coin_information ADD UNIQUE (" \
                    "coin_id" \
                    ");"
-    run_sql('crypto', sql_sentence)
+    run_sql(database, sql_sentence)
 
 
 def setup_sql_database(database):
