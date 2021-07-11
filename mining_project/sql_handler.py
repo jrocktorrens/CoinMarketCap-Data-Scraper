@@ -17,8 +17,8 @@ def run_sql(database, mysql_statement):
 
 def setup_coins_table():
     sql_sentence = "CREATE TABLE IF NOT EXISTS coins (" \
-                   "id INT AUTO_INCREMENT PRIMARY KEY," \
-                   "name VARCHAR(20)" \
+                   "coin_id INT PRIMARY KEY," \
+                   "name TEXT" \
                    ");"
     run_sql('crypto', sql_sentence)
 
@@ -36,33 +36,58 @@ def setup_coin_price_today_table():
                    "market_dominance FLOAT," \
                    "market_cap FLOAT," \
                    "fully_diluted_market_cap FLOAT," \
-                   "coin_rank INT," \
-                   "data_summery VARCHAR(256)" \
+                   "market_rank INT," \
+                   "data_summery TEXT" \
                    ");"
     run_sql('crypto', sql_sentence)
     sql_sentence = "ALTER TABLE `coin_price_today` " \
                    "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
-                   " `coins` (`id`);"
+                   " `coins` (`coin_id`);"
+    run_sql('crypto', sql_sentence)
+    sql_sentence = "ALTER TABLE coin_price_today ADD UNIQUE (" \
+                   "coin_id," \
+                   "price," \
+                   "price_change," \
+                   "low," \
+                   "high," \
+                   "volume," \
+                   "volume_market_cap," \
+                   "market_dominance," \
+                   "market_cap," \
+                   "fully_diluted_market_cap," \
+                   "market_rank);"
     run_sql('crypto', sql_sentence)
 
 
 def setup_coin_price_yesterday_table():
-    sql_sentence = "CREATE TABLE IF NOT EXISTS coin_price_yesterday (" \
-                   "id INT AUTO_INCREMENT PRIMARY KEY," \
-                   "coin_id INT," \
-                   "price FLOAT," \
-                   "low FLOAT," \
-                   "high FLOAT," \
-                   "open FLOAT," \
-                   "close FLOAT," \
-                   "coin_change FLOAT," \
-                   "volume FLOAT" \
-                   ");"
-    run_sql('crypto', sql_sentence)
-    sql_sentence = "ALTER TABLE `coin_price_yesterday` " \
-                   "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
-                   " `coins` (`id`);"
-    run_sql('crypto', sql_sentence)
+    try:
+        sql_sentence = "CREATE TABLE IF NOT EXISTS coin_price_yesterday (" \
+                       "id INT AUTO_INCREMENT PRIMARY KEY," \
+                       "coin_id INT UNIQUE," \
+                       "low FLOAT UNIQUE," \
+                       "high FLOAT UNIQUE," \
+                       "open FLOAT UNIQUE," \
+                       "close FLOAT UNIQUE," \
+                       "coin_change FLOAT UNIQUE," \
+                       "volume FLOAT UNIQUE" \
+                       ");"
+        run_sql('crypto', sql_sentence)
+        sql_sentence = "ALTER TABLE `coin_price_yesterday` " \
+                       "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
+                       " `coins` (`coin_id`);"
+        run_sql('crypto', sql_sentence)
+        sql_sentence = "ALTER TABLE coin_price_yesterday ADD UNIQUE ("\
+                       "coin_id," \
+                       "low," \
+                       "high," \
+                       "open," \
+                       "close," \
+                       "coin_change," \
+                       "volume" \
+                       ");"
+        run_sql('crypto', sql_sentence)
+    except Exception as ex:
+        print(f"Error")
 
 
 def setup_coin_price_history_table():
@@ -77,29 +102,41 @@ def setup_coin_price_history_table():
                    "90d_high FLOAT," \
                    "52w_low FLOAT," \
                    "52w_high FLOAT," \
-                   "all_time_low FLOAT," \
-                   "all_time_high FLOAT," \
-                   "roi FLOAT," \
-                   "circulating_supply INT," \
-                   "total_supply INT," \
-                   "max_supply INT" \
+                   "roi FLOAT" \
                    ");"
     run_sql('crypto', sql_sentence)
     sql_sentence = "ALTER TABLE `coin_price_history` " \
                    "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
-                   " `coins` (`id`);"
+                   " `coins` (`coin_id`);"
+    run_sql('crypto', sql_sentence)
+    sql_sentence = "ALTER TABLE coin_price_history ADD UNIQUE (" \
+                   "coin_id," \
+                   "7d_low," \
+                   "7d_high," \
+                   "30d_low," \
+                   "30d_high," \
+                   "90d_low," \
+                   "90d_high," \
+                   "52w_low," \
+                   "52w_high," \
+                   "roi" \
+                   ");"
     run_sql('crypto', sql_sentence)
 
 
 def setup_coin_information():
     sql_sentence = "CREATE TABLE IF NOT EXISTS coin_information (" \
                    "coin_id INT AUTO_INCREMENT PRIMARY KEY," \
-                   "info VARCHAR(1000)" \
+                   "info TEXT" \
                    ");"
     run_sql('crypto', sql_sentence)
     sql_sentence = "ALTER TABLE `coin_information` " \
                    "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
-                   " `coins` (`id`);"
+                   " `coins` (`coin_id`);"
+    run_sql('crypto', sql_sentence)
+    sql_sentence = "ALTER TABLE coin_information ADD UNIQUE (" \
+                   "coin_id" \
+                   ");"
     run_sql('crypto', sql_sentence)
 
 
@@ -118,123 +155,154 @@ def setup_sql_database():
     setup_coin_price_history_table()
 
 
-def update_coins_table(coins_list):
-    connection = pymysql.connect(host='localhost',
-                                 user='root',
-                                 password='root',
-                                 database='crypto',
-                                 cursorclass=pymysql.cursors.DictCursor)
-    with connection:
-        with connection.cursor() as cursor:
-            for coin in coins_list:
+def update_coins_table(coin_id, coin_name):
+    try:
+        connection = pymysql.connect(host='localhost',
+                                     user='root',
+                                     password='root',
+                                     database='crypto',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        with connection:
+            with connection.cursor() as cursor:
                 sql_statement = "INSERT INTO coins (" \
-                                "name" \
-                                ") VALUES (%s);"
-            # Read a single record
-            cursor.execute(sql_statement)
-            connection.commit()
-            return cursor.fetchall()
+                                    "coin_id," \
+                                    "name" \
+                                    ") VALUES (%s, %s);"
+                    # Write a single record
+                cursor.execute(sql_statement, (coin_id, coin_name))
+                connection.commit()
+                return cursor.fetchall()
+    except pymysql.err.IntegrityError as ex:
+        print("Coin Duplicate error!")
 
 
-def update_coin_price_today_table(info_list):
-    connection = pymysql.connect(host='localhost',
-                                 user='root',
-                                 password='root',
-                                 database='crypto',
-                                 cursorclass=pymysql.cursors.DictCursor)
-    with connection:
-        with connection.cursor() as cursor:
-            sql_statement = "INSERT INTO coin_price (" \
-                            "coin_id" \
-                            "price" \
-                            "price_change" \
-                            "low" \
-                            "high" \
-                            "volume" \
-                            "volume_market_cap" \
-                            "market_dominance" \
-                            "market_cap" \
-                            "fully_diluted_market_cap" \
-                            "coin_rank" \
-                            "data_summery" \
-                            ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-            cursor.execute(sql_statement, (info_list[0], info_list[1], info_list[2], info_list[3],
-                                           info_list[4], info_list[5], info_list[6], info_list[7],
-                                           info_list[8], info_list[9], info_list[10], info_list[11]))
-            connection.commit()
-            return cursor.fetchall()
+def update_coin_price_today_table(current_data, conf):
+    try:
+        connection = pymysql.connect(host='localhost',
+                                     user='root',
+                                     password='root',
+                                     database='crypto',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        with connection:
+            with connection.cursor() as cursor:
+                sql_statement = "INSERT INTO coin_price_today (" \
+                                "coin_id," \
+                                "price," \
+                                "price_change," \
+                                "low," \
+                                "high," \
+                                "volume," \
+                                "volume_market_cap," \
+                                "market_dominance," \
+                                "market_cap," \
+                                "fully_diluted_market_cap," \
+                                "market_rank," \
+                                "data_summery" \
+                                ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+
+                cursor.execute(sql_statement, (current_data[conf.table_key.coin_id],
+                                               current_data[conf.table_key.today_price],
+                                               current_data[conf.table_key.today_price_change],
+                                               current_data[conf.table_key.today_low],
+                                               current_data[conf.table_key.today_high],
+                                               current_data[conf.table_key.today_volume],
+                                               current_data[conf.table_key.today_volume_market_cap],
+                                               current_data[conf.table_key.today_market_dominance],
+                                               current_data[conf.table_key.today_market_cap],
+                                               current_data[conf.table_key.today_fully_diluted_market_cap],
+                                               current_data[conf.table_key.today_market_rank],
+                                               current_data[conf.table_key.today_data_summary]))
+                connection.commit()
+                return cursor.fetchall()
+    except pymysql.err.IntegrityError as ex:
+        print("Coin price today Duplicate error!")
 
 
-def update_coin_price_yesterday_table(info_list):
-    connection = pymysql.connect(host='localhost',
-                                 user='root',
-                                 password='root',
-                                 database='crypto',
-                                 cursorclass=pymysql.cursors.DictCursor)
-    with connection:
-        with connection.cursor() as cursor:
-            sql_statement = "INSERT INTO coin_price_yesterday (" \
-                            "coin_id" \
-                            "price" \
-                            "low" \
-                            "high" \
-                            "open" \
-                            "close" \
-                            "coin_change" \
-                            "volume" \
-                            ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
-            cursor.execute(sql_statement, (info_list[0], info_list[1], info_list[2], info_list[3],
-                                           info_list[4], info_list[5], info_list[6], info_list[7],
-                                           ))
-            connection.commit()
-            return cursor.fetchall()
+def update_coin_price_yesterday_table(current_data, conf):
+    try:
+        connection = pymysql.connect(host='localhost',
+                                     user='root',
+                                     password='root',
+                                     database='crypto',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        with connection:
+            with connection.cursor() as cursor:
+                sql_statement = "INSERT INTO coin_price_yesterday (" \
+                                "coin_id," \
+                                "low," \
+                                "high," \
+                                "open," \
+                                "close," \
+                                "coin_change," \
+                                "volume" \
+                                ") VALUES (%s, %s, %s, %s, %s, %s, %s);"
+                cursor.execute(sql_statement, (current_data[conf.table_key.coin_id],
+                                               current_data[conf.table_key.yesterday_low],
+                                               current_data[conf.table_key.yesterday_high],
+                                               current_data[conf.table_key.yesterday_open],
+                                               current_data[conf.table_key.yesterday_close],
+                                               current_data[conf.table_key.yesterday_change],
+                                               current_data[conf.table_key.yesterday_volume]
+                                               ))
+                connection.commit()
+                return cursor.fetchall()
+    except pymysql.err.IntegrityError as ex:
+        print("Coin price yesterday Duplicate error!")
 
 
-def update_coin_price_history_table(info_list):
-    connection = pymysql.connect(host='localhost',
-                                 user='root',
-                                 password='root',
-                                 database='crypto',
-                                 cursorclass=pymysql.cursors.DictCursor)
-    with connection:
-        with connection.cursor() as cursor:
-            sql_statement = "INSERT INTO coin_price_history (" \
-                            "coin_id" \
-                            "7d_low" \
-                            "7d_high" \
-                            "30d_low" \
-                            "30d_high" \
-                            "90d_low" \
-                            "90d_high" \
-                            "52w_low" \
-                            "52w_high" \
-                            "all_time_low" \
-                            "all_time_high" \
-                            "roi" \
-                            "circulating_supply" \
-                            "total_supply" \
-                            "max_supply" \
-                            ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-            cursor.execute(sql_statement, (info_list[0], info_list[1], info_list[2], info_list[3],
-                                           info_list[4], info_list[5], info_list[6], info_list[7],
-                                           info_list[8], info_list[9], info_list[10], info_list[11],
-                                           info_list[12], info_list[13], info_list[14]))
-            connection.commit()
-            return cursor.fetchall()
+def update_coin_price_history_table(current_data, conf):
+    try:
+        connection = pymysql.connect(host='localhost',
+                                     user='root',
+                                     password='root',
+                                     database='crypto',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        with connection:
+            with connection.cursor() as cursor:
+                sql_statement = "INSERT INTO coin_price_history (" \
+                                "coin_id," \
+                                "7d_low," \
+                                "7d_high," \
+                                "30d_low," \
+                                "30d_high," \
+                                "90d_low," \
+                                "90d_high," \
+                                "52w_low," \
+                                "52w_high," \
+                                "roi" \
+                                ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                cursor.execute(sql_statement, (current_data[conf.table_key.coin_id],
+                                               current_data[conf.table_key.history_7d_low],
+                                               current_data[conf.table_key.history_7d_high],
+                                               current_data[conf.table_key.history_30d_low],
+                                               current_data[conf.table_key.history_30d_high],
+                                               current_data[conf.table_key.history_90d_low],
+                                               current_data[conf.table_key.history_90d_high],
+                                               current_data[conf.table_key.history_52w_low],
+                                               current_data[conf.table_key.history_52w_high],
+                                               current_data[conf.table_key.history_roi]))
+                connection.commit()
+                return cursor.fetchall()
+    except pymysql.err.IntegrityError as ex:
+        print("Coin price history Duplicate error!")
 
 
-def update_coin_information_table(info_list):
-    connection = pymysql.connect(host='localhost',
-                                 user='root',
-                                 password='root',
-                                 database='crypto',
-                                 cursorclass=pymysql.cursors.DictCursor)
-    with connection:
-        with connection.cursor() as cursor:
-            sql_statement = "INSERT INTO coin_information (" \
-                            "coin_id" \
-                            "info" \
-                            ") VALUES (%s, %s);"
-            cursor.execute(sql_statement, (info_list[0], info_list[1]))
-            connection.commit()
-            return cursor.fetchall()
+def update_coin_information_table(current_data, conf):
+    try:
+        connection = pymysql.connect(host='localhost',
+                                     user='root',
+                                     password='root',
+                                     database='crypto',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        with connection:
+            with connection.cursor() as cursor:
+                sql_statement = "INSERT INTO coin_information (" \
+                                "coin_id," \
+                                "info" \
+                                ") VALUES (%s, %s);"
+                cursor.execute(sql_statement, (current_data[conf.table_key.coin_id],
+                                               current_data[conf.table_key.coin_about]))
+                connection.commit()
+                return cursor.fetchall()
+    except pymysql.err.IntegrityError as ex:
+        print("Coin information Duplicate error!")
