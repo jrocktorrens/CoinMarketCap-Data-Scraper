@@ -21,22 +21,26 @@ pip install -r requirements.txt
 
 ## Usage
 
-Call the function get_coin_info(coin_name) with a coin name.
-Currently, the following coins are supported:
+Use the following command line:
 
-- bitcoin
-- ethereum
-- tether
-- binance-coin
-- cardano
-- dogecoin
-- xrp
-- usd-coin
-- polkadot-new
-- uniswap
-- litecoin
-- solana
-- theta
+python crypto.py [-h] < coin_name > < data_type > < attribute >
+  
+positional arguments:
+  
+  < coin_name >  in which coin are you interested?
+    
+    (supported coins: bitcoin, ethereum, tether, binance-coin, cardano, dogecoin, xrp, usd-coin, polkadot-new, uniswap
+     litecoin, solana, theta)
+    
+  < data type >  specify the type of information: (today, yesterday, history, info, about)
+      
+  < attribute >  specify the attribute based on the type:
+    
+      for type 'today': (price, price_change, low, high, volume, volume_market_cap, market_dominance, rank, cap, fully_diluted_market_cap)
+    
+      for type 'yesterday': (low, high, open, close, change, volume)
+    
+      for type 'history': (7d_low, 7d_high, 30d_low, 30d_high, 90d_low, 90d_high, 52w_low, 52w_high, all_time_low, all_time_high, roi)
 
 ### How the function works?
 
@@ -97,9 +101,6 @@ Table coin_price_history include these columns:
 -                   "all_time_low FLOAT," 
 -                   "all_time_high FLOAT," 
 -                   "roi FLOAT," 
--                   "circulating_supply INT," 
--                   "total_supply INT," 
--                   "max_supply INT," 
 
 Table coin_information include these columns:
 -                   "id INT AUTO_INCREMENT PRIMARY KEY," 
