@@ -11,7 +11,6 @@ Yossi Golan (yossigolan@gmail.com)
 import requests
 import json
 
-
 import urllib3.exceptions
 from bs4 import BeautifulSoup
 import settings_handler
@@ -28,7 +27,20 @@ except FileNotFoundError as ex:
     print(f"Error! Can't find settings file! \n{ex}")
     exit(0)
 
-sql_handler.setup_sql_database(conf.sql.database)
+sql_handler.setup_sql_database(conf.sql.database, [conf.sql_create.cypto_database,
+                                                   conf.sql_create.coins_table,
+                                                   [conf.sql_create.coin_information_table,
+                                                    conf.sql_create.coin_information_table2,
+                                                    conf.sql_create.coin_information_table3],
+                                                   [conf.sql_create.coin_price_today_table,
+                                                    conf.sql_create.coin_price_today_table2,
+                                                    conf.sql_create.coin_price_today_table3],
+                                                   [conf.sql_create.coin_price_yesterday_table,
+                                                    conf.sql_create.coin_price_yesterday_table2,
+                                                    conf.sql_create.coin_price_yesterday_table3],
+                                                   [conf.sql_create.coin_price_history_table,
+                                                    conf.sql_create.coin_price_history_table2,
+                                                    conf.sql_create.coin_price_history_table3]])
 coin_data = {}
 
 
@@ -120,19 +132,6 @@ def get_coin_about(coin_text, coin_name):
         # print(about_info.text)
 
 
-def update_sql_tables():
-    """
-    Update all Sql tables with all information
-    :return: Nothing
-    """
-    sql_handler.update_coin_price_today_table(coin_data, conf)
-    sql_handler.update_coin_price_yesterday_table(coin_data, conf)
-    for coin in conf.coins:
-        sql_handler.update_coins_table(conf.coins[coin], coin)
-    sql_handler.update_coin_price_history_table(coin_data, conf)
-    sql_handler.update_coin_information_table(coin_data, conf)
-
-
 def get_coin_info(coin_name):
     """
     Scrap all the information of a crypto coin
@@ -181,7 +180,14 @@ def get_coin_info(coin_name):
         # Get 'What is' coin information that includes coin history and all related information.
         get_coin_about(coin_text, coin_name)
 
-        update_sql_tables()
+        sql_handler.update_sql_tables(conf.sql.database,
+                                      coin_data,
+                                      conf,
+                                      [conf.sql_update.coin_price_today_table,
+                                       conf.sql_update.coin_price_yesterday_table,
+                                       conf.sql_update.coin_price_history_table,
+                                       conf.sql_update.coin_information_table,
+                                       conf.sql_update.coin_table])
 
     except ConnectionError as err:
         print(conf.error_msg.err_web_connection + f"\n({err})")
@@ -189,5 +195,3 @@ def get_coin_info(coin_name):
         print(conf.error_msg.err_web_connection + f"\n({err})")
     except Exception as err:
         print(conf.error_msg.err_web_connection + f"\n({err})")
-
-

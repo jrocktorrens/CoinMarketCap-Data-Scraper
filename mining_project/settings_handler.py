@@ -3,6 +3,7 @@ Handel the settings file
 
 """
 
+
 class Configuration(dict):
     """
     Represents the settings file as a dictionary

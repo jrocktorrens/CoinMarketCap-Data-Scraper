@@ -27,7 +27,8 @@ def today(attribute):
     if attribute not in crypto_info.conf.attribute_today:
         print(f"{crypto_info.conf.error_msg.err_arguments} ({attribute})")
         exit(0)
-    return crypto_info.conf.today_value_sign[attribute] + str(crypto_info.coin_data[crypto_info.conf.attribute_today[attribute]])
+    return crypto_info.conf.today_value_sign[attribute] + str(
+        crypto_info.coin_data[crypto_info.conf.attribute_today[attribute]])
 
 
 def yesterday(attribute):
@@ -39,7 +40,8 @@ def yesterday(attribute):
     if attribute not in crypto_info.conf.attribute_yesterday:
         print(f"{crypto_info.conf.error_msg.err_arguments} ({attribute})")
         exit(0)
-    return crypto_info.conf.yesterday_value_sign[attribute] + str(crypto_info.coin_data[crypto_info.conf.attribute_yesterday[attribute]])
+    return crypto_info.conf.yesterday_value_sign[attribute] + str(
+        crypto_info.coin_data[crypto_info.conf.attribute_yesterday[attribute]])
 
 
 def history(attribute):
@@ -51,7 +53,8 @@ def history(attribute):
     if attribute not in crypto_info.conf.attribute_history:
         print(f"{crypto_info.conf.error_msg.err_arguments} ({attribute})")
         exit(0)
-    return crypto_info.conf.history_value_sign[attribute] + str(crypto_info.coin_data[crypto_info.conf.attribute_history[attribute]])
+    return crypto_info.conf.history_value_sign[attribute] + str(
+        crypto_info.coin_data[crypto_info.conf.attribute_history[attribute]])
 
 
 def main():
@@ -76,9 +79,9 @@ def main():
     crypto_info.get_coin_info(coin_name)
 
     type_map = {'general': general,
-                 'today': today,
-                 'yesterday': yesterday,
-                 'history': history}
+                'today': today,
+                'yesterday': yesterday,
+                'history': history}
 
     print(f"{coin_name} {types} {attribute}: {type_map[types](attribute)}")
 
