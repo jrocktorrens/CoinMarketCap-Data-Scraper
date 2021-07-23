@@ -127,8 +127,9 @@ def get_coin_about(coin_text, coin_name):
     """
     # print_coin_headline("\nWhat is", "?", coin_name)
     coin_data[conf.table_key.coin_about] = ''
-    for about_info in coin_text.find('div', class_=conf.mining_tag.coin_about).div.div.div.div:
-        coin_data[conf.table_key.coin_about] += about_info.text + '\n\n '
+    coin_text = coin_text.find('div', class_=conf.mining_tag.coin_about).div
+    for paragraph in coin_text.find_all('p'):
+        coin_data[conf.table_key.coin_about] += paragraph.text + '\n\n '
         # print(about_info.text)
 
 
