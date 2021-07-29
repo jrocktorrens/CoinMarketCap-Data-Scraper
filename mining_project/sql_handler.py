@@ -56,7 +56,7 @@ def setup_coin_price_today_table(database, sql_sentence):
     run_sql(database, sql_sentence[0])
     # sql_sentence = "ALTER TABLE `coin_price_today` " \
     #                "ADD FOREIGN KEY (`coin_id`) REFERENCES" \
-        # " `coins` (`coin_id`);"
+    #                " `coins` (`coin_id`);"
     run_sql(database, sql_sentence[1])
     # sql_sentence = "ALTER TABLE coin_price_today ADD UNIQUE (" \
     #                "coin_id," \
@@ -357,9 +357,11 @@ def update_sql_tables(database, coin_data, conf, sql_sentence):
     Update all Sql tables with all information
     :return: Nothing
     """
+
+    for coin in conf.coins:
+        update_coins_table(database, conf.coins[coin], coin, sql_sentence[4])
     update_coin_price_today_table(database, coin_data, conf, sql_sentence[0])
     update_coin_price_yesterday_table(database, coin_data, conf, sql_sentence[1])
-    update_coin_price_history_table(database, coin_data, conf, sql_sentence[3])
-    update_coin_information_table(database, coin_data, conf, sql_sentence[4])
-    for coin in conf.coins:
-        update_coins_table(database, conf.coins[coin], coin, sql_sentence[2])
+    update_coin_price_history_table(database, coin_data, conf, sql_sentence[2])
+    update_coin_information_table(database, coin_data, conf, sql_sentence[3])
+

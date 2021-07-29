@@ -24,7 +24,7 @@
     "cypto_database": "CREATE DATABASE IF NOT EXISTS crypto;"
   },
     "sql_update": {
-    "coin_table": "INSERT INTO coins ('coin_id', name) VALUES (%s, %s);",
+    "coin_table": "INSERT INTO coins (coin_id, name) VALUES (%s, %s);",
     "coin_price_today_table": "INSERT INTO coin_price_today (coin_id, price, price_change, low, high, volume, volume_market_cap, market_dominance, market_cap, fully_diluted_market_cap, market_rank, data_summery) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
     "coin_price_yesterday_table": "INSERT INTO coin_price_yesterday (coin_id, low, high, open, close, coin_change, volume) VALUES (%s, %s, %s, %s, %s, %s, %s);",
     "coin_price_history_table": "INSERT INTO coin_price_history (coin_id, 7d_low, 7d_high, 30d_low, 30d_high, 90d_low, 90d_high, 52w_low, 52w_high, roi) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
