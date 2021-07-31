@@ -22,9 +22,12 @@
     "coin_price_history_table": "CREATE TABLE IF NOT EXISTS coin_price_history (id INT AUTO_INCREMENT PRIMARY KEY, coin_id INT, 7d_low FLOAT, 7d_high FLOAT, 30d_low FLOAT, 30d_high FLOAT, 90d_low FLOAT, 90d_high FLOAT, 52w_low FLOAT, 52w_high FLOAT, roi FLOAT, ts timestamp default current_timestamp);",
     "coin_price_history_table2": "ALTER TABLE coin_price_history ADD FOREIGN KEY (coin_id) REFERENCES coins (coin_id);",
     "coin_price_history_table3": "ALTER TABLE coin_price_history ADD UNIQUE (coin_id, 7d_low, 7d_high, 30d_low, 30d_high, 90d_low, 90d_high, 52w_low, 52w_high, roi);",
-    "coin_information_table": "CREATE TABLE IF NOT EXISTS coin_information (coin_id INT AUTO_INCREMENT PRIMARY KEY, info TEXT);",
-    "coin_information_table2": "ALTER TABLE `coin_information`ADD FOREIGN KEY (`coin_id`) REFERENCES`coins`(coin_id);",
+    "coin_information_table": "CREATE TABLE IF NOT EXISTS coin_information (id INT AUTO_INCREMENT PRIMARY KEY, coin_id INT, info TEXT);",
+    "coin_information_table2": "ALTER TABLE coin_information ADD FOREIGN KEY (coin_id) REFERENCES coins (coin_id);",
     "coin_information_table3": "ALTER TABLE coin_information ADD UNIQUE (coin_id);",
+    "coin_google_table": "CREATE TABLE IF NOT EXISTS coin_google (id INT AUTO_INCREMENT PRIMARY KEY, coin_id INT, google_popularity INT, google_sites TEXT);",
+    "coin_google_table2": "ALTER TABLE coin_google ADD FOREIGN KEY (coin_id) REFERENCES coins (coin_id);",
+    "coin_google_table3": "ALTER TABLE coin_google ADD UNIQUE (coin_id, google_popularity);",
     "cypto_database": "CREATE DATABASE IF NOT EXISTS crypto;"
     },
     "sql_update": {
@@ -32,7 +35,9 @@
     "coin_price_today_table": "INSERT INTO coin_price_today (coin_id, price, price_change, low, high, volume, volume_market_cap, market_dominance, market_cap, fully_diluted_market_cap, market_rank, data_summery) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
     "coin_price_yesterday_table": "INSERT INTO coin_price_yesterday (coin_id, low, high, open, close, coin_change, volume) VALUES (%s, %s, %s, %s, %s, %s, %s);",
     "coin_price_history_table": "INSERT INTO coin_price_history (coin_id, 7d_low, 7d_high, 30d_low, 30d_high, 90d_low, 90d_high, 52w_low, 52w_high, roi) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
-    "coin_information_table": "INSERT INTO coin_information (coin_id, info) VALUES (%s, %s);"
+    "coin_information_table": "INSERT INTO coin_information (coin_id, info) VALUES (%s, %s);",
+    "coin_google_table": "INSERT INTO coin_google (coin_id, google_popularity, google_sites) VALUES (%s, %s, %s);"
+
   },
   "coins": {
     "bitcoin": 1,

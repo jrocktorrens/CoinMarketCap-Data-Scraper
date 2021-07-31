@@ -23,6 +23,25 @@ def run_sql(database, mysql_statement):
             return cursor.fetchall()
 
 
+def setup_table(database, sql_sentence):
+    """
+    Create a table in not exist
+    :param database: database name
+    :param sql_sentence: the sql sentence
+    :return: nothing
+    """
+    try:
+        if isinstance(sql_sentence, list):
+            run_sql(database, sql_sentence[0])
+            run_sql(database, sql_sentence[1])
+            run_sql(database, sql_sentence[2])
+
+        else:
+            run_sql(database, sql_sentence)
+    except database.IntegrityError as ex:
+        print(f"Error {ex}")
+
+
 def setup_coins_table(database, sql_sentence):
     """
     Create the coins table if not exist
@@ -80,13 +99,20 @@ def setup_sql_database(database, sql_sentence):
     and then create all tables
     :return: nothing
     """
+    # Create database in not exist
     run_sql(None, sql_sentence[0])
-
-    setup_coins_table(database, sql_sentence[1])
-    setup_coin_information(database, sql_sentence[2])
-    setup_coin_price_today_table(database, sql_sentence[3])
-    setup_coin_price_yesterday_table(database, sql_sentence[4])
-    setup_coin_price_history_table(database, sql_sentence[5])
+    # Setup coins table
+    setup_table(database, sql_sentence[1])
+    # Setup coin_information table
+    setup_table(database, sql_sentence[2])
+    # Setup coin_price_today table
+    setup_table(database, sql_sentence[3])
+    # Setup coin_price_yesterday table
+    setup_table(database, sql_sentence[4])
+    # Setup coin_price_history table
+    setup_table(database, sql_sentence[5])
+    # Setup coin_google table
+    setup_table(database, sql_sentence[6])
 
 
 def update_coins_table(database, coin_id, coin_name, sql_sentence):

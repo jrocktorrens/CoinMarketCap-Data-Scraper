@@ -53,7 +53,11 @@ def init_program():
                                                         conf.sql_create.coin_price_yesterday_table3],
                                                        [conf.sql_create.coin_price_history_table,
                                                         conf.sql_create.coin_price_history_table2,
-                                                        conf.sql_create.coin_price_history_table3]])
+                                                        conf.sql_create.coin_price_history_table3],
+                                                       [conf.sql_create.coin_google_table,
+                                                        conf.sql_create.coin_google_table2,
+                                                        conf.sql_create.coin_google_table3]
+                                                       ])
 
 
 def print_coin_headline(pre_message, post_message, coin_name):
