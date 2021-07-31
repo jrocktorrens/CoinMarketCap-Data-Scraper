@@ -62,6 +62,7 @@ def main():
     Get user command line parameters
     :return: nothing
     """
+    crypto_info.init_program()
     cmp_scraping = argparse.ArgumentParser()
     cmp_scraping.add_argument('coin_name', type=str, metavar='<coin_name>',
                               help='in which coin are you interested?', )

@@ -1,5 +1,7 @@
 import pymysql.cursors
 
+import crypto_info
+
 
 def run_sql(database, mysql_statement):
     """
@@ -48,8 +50,8 @@ def setup_coin_price_yesterday_table(database, sql_sentence):
         run_sql(database, sql_sentence[0])
         run_sql(database, sql_sentence[1])
         run_sql(database, sql_sentence[2])
-    except Exception as ex:
-        print(f"Error")
+    except database.IntegrityError as ex:
+        print(f"Error {ex}")
 
 
 def setup_coin_price_history_table(database, sql_sentence):
@@ -90,6 +92,8 @@ def setup_sql_database(database, sql_sentence):
 def update_coins_table(database, coin_id, coin_name, sql_sentence):
     """
     Insert a record to coins table
+    :param sql_sentence: sql sentence to execute
+    :param database: the database
     :param coin_id: coin id
     :param coin_name: coin name
     :return: nothing
@@ -105,7 +109,7 @@ def update_coins_table(database, coin_id, coin_name, sql_sentence):
                 cursor.execute(sql_sentence, (coin_id, coin_name))
                 connection.commit()
                 return cursor.fetchall()
-    except pymysql.err.IntegrityError as ex:
+    except pymysql.err.IntegrityError:
         # print("Coin Duplicate error!")
         pass
 
@@ -113,6 +117,8 @@ def update_coins_table(database, coin_id, coin_name, sql_sentence):
 def update_coin_price_today_table(database, current_data, conf, sql_sentence):
     """
     Insert a record to today's coin price table
+    :param sql_sentence: sql sentence to execute
+    :param database: the database
     :param current_data: data to insert
     :param conf: settings file
     :return: nothing
@@ -139,7 +145,7 @@ def update_coin_price_today_table(database, current_data, conf, sql_sentence):
                                               current_data[conf.table_key.today_data_summary]))
                 connection.commit()
                 return cursor.fetchall()
-    except pymysql.err.IntegrityError as ex:
+    except pymysql.err.IntegrityError:
         # print("Coin price today Duplicate error!")
         pass
 
@@ -163,7 +169,7 @@ def update_coin_price_yesterday_table(database, current_data, conf, sql_sentence
                                               ))
                 connection.commit()
                 return cursor.fetchall()
-    except pymysql.err.IntegrityError as ex:
+    except pymysql.err.IntegrityError:
         # print("Coin price yesterday Duplicate error!")
         pass
 
@@ -189,7 +195,7 @@ def update_coin_price_history_table(database, current_data, conf, sql_sentence):
                                               current_data[conf.table_key.history_roi]))
                 connection.commit()
                 return cursor.fetchall()
-    except pymysql.err.IntegrityError as ex:
+    except pymysql.err.IntegrityError:
         # print("Coin price history Duplicate error!")
         pass
 
@@ -207,7 +213,7 @@ def update_coin_information_table(database, current_data, conf, sql_sentence):
                                               current_data[conf.table_key.coin_about]))
                 connection.commit()
                 return cursor.fetchall()
-    except pymysql.err.IntegrityError as ex:
+    except pymysql.err.IntegrityError:
         # print("Coin information Duplicate error!")
         pass
 

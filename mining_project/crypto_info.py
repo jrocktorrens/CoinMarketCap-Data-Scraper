@@ -10,6 +10,7 @@ Yossi Golan (yossigolan@gmail.com)
 
 import requests
 import json
+import google
 
 import urllib3.exceptions
 from bs4 import BeautifulSoup
@@ -18,30 +19,41 @@ import sql_handler
 from decimal import Decimal
 from re import sub
 
-try:
-    with open('crypto_settings.json', 'r') as f:
-        conf_json = settings_handler.Configuration(json.loads(f.read()))
-        f.close()
-        conf = settings_handler.Configuration(conf_json)
-except FileNotFoundError as ex:
-    print(f"Error! Can't find settings file! \n{ex}")
-    exit(0)
-
-sql_handler.setup_sql_database(conf.sql.database, [conf.sql_create.cypto_database,
-                                                   conf.sql_create.coins_table,
-                                                   [conf.sql_create.coin_information_table,
-                                                    conf.sql_create.coin_information_table2,
-                                                    conf.sql_create.coin_information_table3],
-                                                   [conf.sql_create.coin_price_today_table,
-                                                    conf.sql_create.coin_price_today_table2,
-                                                    conf.sql_create.coin_price_today_table3],
-                                                   [conf.sql_create.coin_price_yesterday_table,
-                                                    conf.sql_create.coin_price_yesterday_table2,
-                                                    conf.sql_create.coin_price_yesterday_table3],
-                                                   [conf.sql_create.coin_price_history_table,
-                                                    conf.sql_create.coin_price_history_table2,
-                                                    conf.sql_create.coin_price_history_table3]])
 coin_data = {}
+conf = None
+
+
+def init_program():
+    """
+    function for initializing program:
+    load settings file
+    create sql tables
+    :return: nothing
+    """
+    global conf
+    try:
+        with open('crypto_settings.json', 'r') as f:
+            conf_json = settings_handler.Configuration(json.loads(f.read()))
+            f.close()
+            conf = settings_handler.Configuration(conf_json)
+    except FileNotFoundError as ex:
+        print(f"Error! Can't find settings file! \n{ex}")
+        exit(0)
+
+    sql_handler.setup_sql_database(conf.sql.database, [conf.sql_create.cypto_database,
+                                                       conf.sql_create.coins_table,
+                                                       [conf.sql_create.coin_information_table,
+                                                        conf.sql_create.coin_information_table2,
+                                                        conf.sql_create.coin_information_table3],
+                                                       [conf.sql_create.coin_price_today_table,
+                                                        conf.sql_create.coin_price_today_table2,
+                                                        conf.sql_create.coin_price_today_table3],
+                                                       [conf.sql_create.coin_price_yesterday_table,
+                                                        conf.sql_create.coin_price_yesterday_table2,
+                                                        conf.sql_create.coin_price_yesterday_table3],
+                                                       [conf.sql_create.coin_price_history_table,
+                                                        conf.sql_create.coin_price_history_table2,
+                                                        conf.sql_create.coin_price_history_table3]])
 
 
 def print_coin_headline(pre_message, post_message, coin_name):
@@ -118,11 +130,10 @@ def get_coin_information(coin_text):
     # print(coin_data[conf.table_key.today_data_summary])
 
 
-def get_coin_about(coin_text, coin_name):
+def get_coin_about(coin_text):
     """
     Get the 'About coin' information
     :param coin_text: coin html
-    :param coin_name: coin name
     :return: nothing
     """
     # print_coin_headline("\nWhat is", "?", coin_name)
@@ -131,6 +142,35 @@ def get_coin_about(coin_text, coin_name):
     for paragraph in coin_text.find_all('p'):
         coin_data[conf.table_key.coin_about] += paragraph.text + '\n\n '
         # print(about_info.text)
+
+
+def get_coin_price_data(soup, coin_name):
+    """
+    Get price data (today, yesterday, history)
+    :param soup: soup html
+    :param coin_name: name of coin
+    :return: nothing
+    """
+    # Get all divs that contain coin statistics
+    coin_data[conf.table_key.coin_id] = conf.coins[coin_name]
+    # Get first 4 tables
+    price_statistics = soup.find_all('div', class_=conf.mining_tag.main_div)
+    div_counter = 0
+    for item in price_statistics:
+        coin_info = item.find('table').find('tbody').find_all('tr')
+        for row in coin_info:
+            table_key = row.contents[0].text.lower().strip()
+            split_titles = table_key.split('/')
+            two_data = row.contents[1].find_all('div')
+            if len(two_data) > 1:
+                parse_two_words(split_titles, two_data)
+            elif row.contents[1].find('span') is not None:
+                parse_span(row)
+            else:
+                parse_word(row, coin_name)
+        div_counter += 1
+        if div_counter == 4:
+            break
 
 
 def get_coin_info(coin_name):
@@ -148,39 +188,21 @@ def get_coin_info(coin_name):
     try:
         r = requests.get(conf.settings.SITE_URL + coin_name + "/")
         soup = BeautifulSoup(r.text, 'html.parser')
-
-        # print_coin_headline("\nHere is the latest price statistics of", ":", coin_name)
-
-        # Get all divs that contain coin statistics
-        coin_data[conf.table_key.coin_id] = conf.coins[coin_name]
-        # Get first 4 tables
-        price_statistics = soup.find_all('div', class_=conf.mining_tag.main_div)
-        div_counter = 0
-        for item in price_statistics:
-            coin_info = item.find('table').find('tbody').find_all('tr')
-            for row in coin_info:
-                table_key = row.contents[0].text.lower().strip()
-                split_titles = table_key.split('/')
-                two_data = row.contents[1].find_all('div')
-                if len(two_data) > 1:
-                    parse_two_words(split_titles, two_data)
-                elif row.contents[1].find('span') is not None:
-                    parse_span(row)
-                else:
-                    parse_word(row, coin_name)
-            div_counter += 1
-            if div_counter == 4:
-                break
-
-        # print_coin_headline("\nHere is a live data summery of", ":", coin_name)
+        # Get coin price data
+        get_coin_price_data(soup, coin_name)
 
         # Get updated coin information summary
         coin_text = soup.find('div', class_=conf.mining_tag.coin_info_main)
         get_coin_information(coin_text)
 
         # Get 'What is' coin information that includes coin history and all related information.
-        get_coin_about(coin_text, coin_name)
+        get_coin_about(coin_text)
 
+        # Get google information
+        google.search_google(coin_name, conf.google.api_key,
+                             conf.google.search_engine_id)
+
+        # Update sql tables with new information
         sql_handler.update_sql_tables(conf.sql.database,
                                       coin_data,
                                       conf,
@@ -194,5 +216,4 @@ def get_coin_info(coin_name):
         print(conf.error_msg.err_web_connection + f"\n({err})")
     except urllib3.exceptions.NewConnectionError as err:
         print(conf.error_msg.err_web_connection + f"\n({err})")
-    except Exception as err:
-        print(conf.error_msg.err_web_connection + f"\n({err})")
+
