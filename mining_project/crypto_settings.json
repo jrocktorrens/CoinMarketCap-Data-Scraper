@@ -93,7 +93,9 @@
     "history_circulating_supply": "circulating supply",
     "history_total_supply": "total supply",
     "history_max_supply": "max supply",
-    "coin_about": "coin about"
+    "coin_about": "coin about",
+    "google_popularity": "google popularity",
+    "google_sites": "google sites"
   },
     "attribute_today": {
       "price": "price",

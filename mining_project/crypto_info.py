@@ -203,8 +203,11 @@ def get_coin_info(coin_name):
         get_coin_about(coin_text)
 
         # Get google information
-        google.search_google(coin_name, conf.google.api_key,
-                             conf.google.search_engine_id)
+        coin_data[conf.table_key.google_popularity], \
+            coin_data[conf.table_key.google_sites] = \
+            google.search_google(coin_name,
+                                 conf.google.api_key,
+                                 conf.google.search_engine_id)
 
         # Update sql tables with new information
         sql_handler.update_sql_tables(conf.sql.database,
@@ -214,10 +217,10 @@ def get_coin_info(coin_name):
                                        conf.sql_update.coin_price_yesterday_table,
                                        conf.sql_update.coin_price_history_table,
                                        conf.sql_update.coin_information_table,
+                                       conf.sql_update.coin_google_table,
                                        conf.sql_update.coin_table])
 
     except ConnectionError as err:
         print(conf.error_msg.err_web_connection + f"\n({err})")
     except urllib3.exceptions.NewConnectionError as err:
         print(conf.error_msg.err_web_connection + f"\n({err})")
-

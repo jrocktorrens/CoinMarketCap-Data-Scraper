@@ -42,57 +42,6 @@ def setup_table(database, sql_sentence):
         print(f"Error {ex}")
 
 
-def setup_coins_table(database, sql_sentence):
-    """
-    Create the coins table if not exist
-    :return: nothing
-    """
-    run_sql(database, sql_sentence)
-
-
-def setup_coin_price_today_table(database, sql_sentence):
-    """
-    Create today's coin price table
-    :return: nothing
-    """
-    run_sql(database, sql_sentence[0])
-    run_sql(database, sql_sentence[1])
-    run_sql(database, sql_sentence[2])
-
-
-def setup_coin_price_yesterday_table(database, sql_sentence):
-    """
-    Create yesterday's coin price table
-    :return: nothing
-    """
-    try:
-        run_sql(database, sql_sentence[0])
-        run_sql(database, sql_sentence[1])
-        run_sql(database, sql_sentence[2])
-    except database.IntegrityError as ex:
-        print(f"Error {ex}")
-
-
-def setup_coin_price_history_table(database, sql_sentence):
-    """
-    Create price history table
-    :return: nothing
-    """
-    run_sql(database, sql_sentence[0])
-    run_sql(database, sql_sentence[1])
-    run_sql(database, sql_sentence[2])
-
-
-def setup_coin_information(database, sql_sentence):
-    """
-    Create coin information table
-    :return: nothing
-    """
-    run_sql(database, sql_sentence[0])
-    run_sql(database, sql_sentence[1])
-    run_sql(database, sql_sentence[2])
-
-
 def setup_sql_database(database, sql_sentence):
     """
     Setup sql database if not exist
@@ -118,10 +67,10 @@ def setup_sql_database(database, sql_sentence):
 def update_coins_table(database, coin_id, coin_name, sql_sentence):
     """
     Insert a record to coins table
-    :param sql_sentence: sql sentence to execute
     :param database: the database
     :param coin_id: coin id
     :param coin_name: coin name
+    :param sql_sentence: sql sentence to execute
     :return: nothing
     """
     try:
@@ -143,10 +92,10 @@ def update_coins_table(database, coin_id, coin_name, sql_sentence):
 def update_coin_price_today_table(database, current_data, conf, sql_sentence):
     """
     Insert a record to today's coin price table
-    :param sql_sentence: sql sentence to execute
     :param database: the database
     :param current_data: data to insert
     :param conf: settings file
+    :param sql_sentence: sql sentence to execute
     :return: nothing
     """
     try:
@@ -177,6 +126,14 @@ def update_coin_price_today_table(database, current_data, conf, sql_sentence):
 
 
 def update_coin_price_yesterday_table(database, current_data, conf, sql_sentence):
+    """
+    Insert a record to yesterday's coin price table
+    :param database: the database
+    :param current_data: data to insert
+    :param conf: settings file
+    :param sql_sentence: sql sentence to execute
+    :return: nothing
+    """
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -201,6 +158,14 @@ def update_coin_price_yesterday_table(database, current_data, conf, sql_sentence
 
 
 def update_coin_price_history_table(database, current_data, conf, sql_sentence):
+    """
+    Insert a record to coin's history price table
+    :param database: the database
+    :param current_data: data to insert
+    :param conf: settings file
+    :param sql_sentence: sql sentence to execute
+    :return: nothing
+    """
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -227,6 +192,14 @@ def update_coin_price_history_table(database, current_data, conf, sql_sentence):
 
 
 def update_coin_information_table(database, current_data, conf, sql_sentence):
+    """
+    Insert a record to coin's information table
+    :param database: the database
+    :param current_data: data to insert
+    :param conf: settings file
+    :param sql_sentence: sql sentence to execute
+    :return: nothing
+    """
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -244,6 +217,33 @@ def update_coin_information_table(database, current_data, conf, sql_sentence):
         pass
 
 
+def update_coin_google_table(database, current_data, conf, sql_sentence):
+    """
+    Insert a record to coin's google table
+    :param database: the database
+    :param current_data: data to insert
+    :param conf: settings file
+    :param sql_sentence: sql sentence to execute
+    :return: nothing
+    """
+    try:
+        connection = pymysql.connect(host='localhost',
+                                     user='root',
+                                     password='root',
+                                     database=database,
+                                     cursorclass=pymysql.cursors.DictCursor)
+        with connection:
+            with connection.cursor() as cursor:
+                cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
+                                              current_data[conf.table_key.google_popularity],
+                                              current_data[conf.table_key.google_sites]))
+                connection.commit()
+                return cursor.fetchall()
+    except pymysql.err.IntegrityError:
+        # print("Coin information Duplicate error!")
+        pass
+
+
 def update_sql_tables(database, coin_data, conf, sql_sentence):
     """
     Update all Sql tables with all information
@@ -251,9 +251,9 @@ def update_sql_tables(database, coin_data, conf, sql_sentence):
     """
 
     for coin in conf.coins:
-        update_coins_table(database, conf.coins[coin], coin, sql_sentence[4])
+        update_coins_table(database, conf.coins[coin], coin, sql_sentence[5])
     update_coin_price_today_table(database, coin_data, conf, sql_sentence[0])
     update_coin_price_yesterday_table(database, coin_data, conf, sql_sentence[1])
     update_coin_price_history_table(database, coin_data, conf, sql_sentence[2])
     update_coin_information_table(database, coin_data, conf, sql_sentence[3])
-
+    update_coin_google_table(database, coin_data, conf, sql_sentence[4])
