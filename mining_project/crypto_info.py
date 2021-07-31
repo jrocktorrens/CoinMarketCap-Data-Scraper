@@ -7,6 +7,7 @@ Aviad Haviv (rikicodes@gmail.com)
 Yossi Golan (yossigolan@gmail.com)
 
 """
+import decimal
 
 import requests
 import json
@@ -78,7 +79,11 @@ def clean_value(value):
     :param value: the original value
     :return: the value after cleaning
     """
-    return Decimal(sub(r'[^\d.]', '', value))
+    try:
+        new_value = Decimal(sub(r'[^\d.]', '', value))
+        return new_value
+    except (ValueError, TypeError, decimal.InvalidOperation):
+        return None
 
 
 def parse_two_words(titles, data):

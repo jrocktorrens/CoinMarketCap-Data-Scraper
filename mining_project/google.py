@@ -14,4 +14,3 @@ def search_google(query, api_key, search_engine_id):
         web_sites += search_item['link'] + '\n'
 
     return total_results, web_sites
-

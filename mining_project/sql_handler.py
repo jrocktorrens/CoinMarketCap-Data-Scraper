@@ -1,6 +1,18 @@
 import pymysql.cursors
 
-import crypto_info
+
+def cast(val, to_type, default=None):
+    """
+    Safely cast variable to a type
+    :param val: value
+    :param to_type: type to cast to
+    :param default: default value if cast fails
+    :return: casted value
+    """
+    try:
+        return to_type(val)
+    except (ValueError, TypeError):
+        return default
 
 
 def run_sql(database, mysql_statement):
@@ -107,16 +119,16 @@ def update_coin_price_today_table(database, current_data, conf, sql_sentence):
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
-                                              current_data[conf.table_key.today_price],
-                                              current_data[conf.table_key.today_price_change],
-                                              current_data[conf.table_key.today_low],
-                                              current_data[conf.table_key.today_high],
-                                              current_data[conf.table_key.today_volume],
-                                              current_data[conf.table_key.today_volume_market_cap],
-                                              current_data[conf.table_key.today_market_dominance],
-                                              current_data[conf.table_key.today_market_cap],
-                                              current_data[conf.table_key.today_fully_diluted_market_cap],
-                                              current_data[conf.table_key.today_market_rank],
+                                              cast(current_data[conf.table_key.today_price], float),
+                                              cast(current_data[conf.table_key.today_price_change], float),
+                                              cast(current_data[conf.table_key.today_low], float),
+                                              cast(current_data[conf.table_key.today_high], float),
+                                              cast(current_data[conf.table_key.today_volume], float),
+                                              cast(current_data[conf.table_key.today_volume_market_cap], float),
+                                              cast(current_data[conf.table_key.today_market_dominance], float),
+                                              cast(current_data[conf.table_key.today_market_cap], float),
+                                              cast(current_data[conf.table_key.today_fully_diluted_market_cap], float),
+                                              cast(current_data[conf.table_key.today_market_rank], float),
                                               current_data[conf.table_key.today_data_summary]))
                 connection.commit()
                 return cursor.fetchall()
@@ -143,12 +155,12 @@ def update_coin_price_yesterday_table(database, current_data, conf, sql_sentence
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
-                                              current_data[conf.table_key.yesterday_low],
-                                              current_data[conf.table_key.yesterday_high],
-                                              current_data[conf.table_key.yesterday_open],
-                                              current_data[conf.table_key.yesterday_close],
-                                              current_data[conf.table_key.yesterday_change],
-                                              current_data[conf.table_key.yesterday_volume]
+                                              cast(current_data[conf.table_key.yesterday_low], float),
+                                              cast(current_data[conf.table_key.yesterday_high], float),
+                                              cast(current_data[conf.table_key.yesterday_open], float),
+                                              cast(current_data[conf.table_key.yesterday_close], float),
+                                              cast(current_data[conf.table_key.yesterday_change], float),
+                                              cast(current_data[conf.table_key.yesterday_volume], float)
                                               ))
                 connection.commit()
                 return cursor.fetchall()
@@ -175,15 +187,15 @@ def update_coin_price_history_table(database, current_data, conf, sql_sentence):
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
-                                              current_data[conf.table_key.history_7d_low],
-                                              current_data[conf.table_key.history_7d_high],
-                                              current_data[conf.table_key.history_30d_low],
-                                              current_data[conf.table_key.history_30d_high],
-                                              current_data[conf.table_key.history_90d_low],
-                                              current_data[conf.table_key.history_90d_high],
-                                              current_data[conf.table_key.history_52w_low],
-                                              current_data[conf.table_key.history_52w_high],
-                                              current_data[conf.table_key.history_roi]))
+                                              cast(current_data[conf.table_key.history_7d_low], float),
+                                              cast(current_data[conf.table_key.history_7d_high], float),
+                                              cast(current_data[conf.table_key.history_30d_low], float),
+                                              cast(current_data[conf.table_key.history_30d_high], float),
+                                              cast(current_data[conf.table_key.history_90d_low], float),
+                                              cast(current_data[conf.table_key.history_90d_high], float),
+                                              cast(current_data[conf.table_key.history_52w_low], float),
+                                              cast(current_data[conf.table_key.history_52w_high], float),
+                                              cast(current_data[conf.table_key.history_roi], float)))
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError:
@@ -235,7 +247,7 @@ def update_coin_google_table(database, current_data, conf, sql_sentence):
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
-                                              current_data[conf.table_key.google_popularity],
+                                              cast(current_data[conf.table_key.google_popularity], int),
                                               current_data[conf.table_key.google_sites]))
                 connection.commit()
                 return cursor.fetchall()
