@@ -8,7 +8,7 @@ Yossi Golan (yossigolan@gmail.com)
 
 """
 import decimal
-
+import logging
 import requests
 import json
 import google
@@ -31,6 +31,8 @@ def init_program():
     create sql tables
     :return: nothing
     """
+    logging.basicConfig(filename="crypto.log", level=logging.INFO, format='%(asctime)s %(message)s')
+    logging.info('Initializing program...')
     global conf
     try:
         with open('crypto_settings.json', 'r') as f:
@@ -38,6 +40,7 @@ def init_program():
             f.close()
             conf = settings_handler.Configuration(conf_json)
     except FileNotFoundError as ex:
+        logging.error('Settings file was not found!')
         print(f"Error! Can't find settings file! \n{ex}")
         exit(0)
 
@@ -83,6 +86,7 @@ def clean_value(value):
         new_value = Decimal(sub(r'[^\d.]', '', value))
         return new_value
     except (ValueError, TypeError, decimal.InvalidOperation):
+        logging.debug('Cleaning process failed')
         return None
 
 
@@ -160,6 +164,8 @@ def get_coin_price_data(soup, coin_name):
     :param coin_name: name of coin
     :return: nothing
     """
+    logging.info('Coin price processing begins...')
+
     # Get all divs that contain coin statistics
     coin_data[conf.table_key.coin_id] = conf.coins[coin_name]
     # Get first 4 tables
@@ -224,8 +230,10 @@ def get_coin_info(coin_name):
                                        conf.sql_update.coin_information_table,
                                        conf.sql_update.coin_google_table,
                                        conf.sql_update.coin_table])
-
+        logging.info('Coin price processing finished...')
     except ConnectionError as err:
+        logging.error('Coin price processing Connection error')
         print(conf.error_msg.err_web_connection + f"\n({err})")
     except urllib3.exceptions.NewConnectionError as err:
+        logging.error('Coin price processing Connection issue...')
         print(conf.error_msg.err_web_connection + f"\n({err})")

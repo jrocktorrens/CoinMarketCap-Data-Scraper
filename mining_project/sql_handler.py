@@ -1,3 +1,5 @@
+import logging
+
 import pymysql.cursors
 
 
@@ -60,8 +62,12 @@ def setup_sql_database(database, sql_sentence):
     and then create all tables
     :return: nothing
     """
+    logging.info('Setting UP Database')
     # Create database in not exist
     run_sql(None, sql_sentence[0])
+
+    logging.info('Setting UP Tables')
+
     # Setup coins table
     setup_table(database, sql_sentence[1])
     # Setup coin_information table
@@ -85,6 +91,8 @@ def update_coins_table(database, coin_id, coin_name, sql_sentence):
     :param sql_sentence: sql sentence to execute
     :return: nothing
     """
+    logging.info('Updating coins table')
+
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -97,6 +105,7 @@ def update_coins_table(database, coin_id, coin_name, sql_sentence):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError:
+        logging.debug('duplicate record at coins table')
         # print("Coin Duplicate error!")
         pass
 
@@ -110,6 +119,7 @@ def update_coin_price_today_table(database, current_data, conf, sql_sentence):
     :param sql_sentence: sql sentence to execute
     :return: nothing
     """
+    logging.info('Updating price_today table')
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -133,6 +143,7 @@ def update_coin_price_today_table(database, current_data, conf, sql_sentence):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError:
+        logging.debug('duplicate record at price_today table')
         # print("Coin price today Duplicate error!")
         pass
 
@@ -146,6 +157,8 @@ def update_coin_price_yesterday_table(database, current_data, conf, sql_sentence
     :param sql_sentence: sql sentence to execute
     :return: nothing
     """
+    logging.info('Updating yesterday price table')
+
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -165,6 +178,7 @@ def update_coin_price_yesterday_table(database, current_data, conf, sql_sentence
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError:
+        logging.debug('duplicate record at yesterday price table')
         # print("Coin price yesterday Duplicate error!")
         pass
 
@@ -178,6 +192,8 @@ def update_coin_price_history_table(database, current_data, conf, sql_sentence):
     :param sql_sentence: sql sentence to execute
     :return: nothing
     """
+    logging.info('Updating price history table')
+
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -199,6 +215,7 @@ def update_coin_price_history_table(database, current_data, conf, sql_sentence):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError:
+        logging.debug('duplicate record at price history table')
         # print("Coin price history Duplicate error!")
         pass
 
@@ -212,6 +229,8 @@ def update_coin_information_table(database, current_data, conf, sql_sentence):
     :param sql_sentence: sql sentence to execute
     :return: nothing
     """
+    logging.info('Updating coin information table')
+
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -225,6 +244,7 @@ def update_coin_information_table(database, current_data, conf, sql_sentence):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError:
+        logging.debug('duplicate record at coin information table')
         # print("Coin information Duplicate error!")
         pass
 
@@ -238,6 +258,8 @@ def update_coin_google_table(database, current_data, conf, sql_sentence):
     :param sql_sentence: sql sentence to execute
     :return: nothing
     """
+    logging.info('Updating coin google information table')
+
     try:
         connection = pymysql.connect(host='localhost',
                                      user='root',
@@ -252,6 +274,7 @@ def update_coin_google_table(database, current_data, conf, sql_sentence):
                 connection.commit()
                 return cursor.fetchall()
     except pymysql.err.IntegrityError:
+        logging.debug('duplicate record at google information table')
         # print("Coin information Duplicate error!")
         pass
 
