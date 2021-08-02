@@ -135,7 +135,9 @@
   },
     "attribute_general": {
     "info": "coin info",
-    "about": "coin about"
+    "about": "coin about",
+    "google_rate": "google popularity",
+    "google_sites": "google sites"
   },
       "today_value_sign": {
         "price": "$",

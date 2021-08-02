@@ -20,7 +20,9 @@ import sql_handler
 from decimal import Decimal
 from re import sub
 
+# coin_data is a global variable to store coin data
 coin_data = {}
+# conf is a global variable of the configuration file
 conf = None
 
 
