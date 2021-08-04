@@ -25,7 +25,7 @@
     "coin_information_table": "CREATE TABLE IF NOT EXISTS coin_information (id INT AUTO_INCREMENT PRIMARY KEY, coin_id INT, info TEXT);",
     "coin_information_table2": "ALTER TABLE coin_information ADD FOREIGN KEY (coin_id) REFERENCES coins (coin_id);",
     "coin_information_table3": "ALTER TABLE coin_information ADD UNIQUE (coin_id);",
-    "coin_google_table": "CREATE TABLE IF NOT EXISTS coin_google (id INT AUTO_INCREMENT PRIMARY KEY, coin_id INT, google_popularity INT, google_sites TEXT);",
+    "coin_google_table": "CREATE TABLE IF NOT EXISTS coin_google (id INT AUTO_INCREMENT PRIMARY KEY, coin_id INT, google_popularity DOUBLE, google_sites TEXT);",
     "coin_google_table2": "ALTER TABLE coin_google ADD FOREIGN KEY (coin_id) REFERENCES coins (coin_id);",
     "coin_google_table3": "ALTER TABLE coin_google ADD UNIQUE (coin_id, google_popularity);",
     "cypto_database": "CREATE DATABASE IF NOT EXISTS crypto;"
