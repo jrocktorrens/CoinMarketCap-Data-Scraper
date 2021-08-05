@@ -48,21 +48,11 @@ def init_program():
 
     sql_handler.setup_sql_database(conf.sql.database, [conf.sql_create.cypto_database,
                                                        conf.sql_create.coins_table,
-                                                       [conf.sql_create.coin_information_table,
-                                                        conf.sql_create.coin_information_table2,
-                                                        conf.sql_create.coin_information_table3],
-                                                       [conf.sql_create.coin_price_today_table,
-                                                        conf.sql_create.coin_price_today_table2,
-                                                        conf.sql_create.coin_price_today_table3],
-                                                       [conf.sql_create.coin_price_yesterday_table,
-                                                        conf.sql_create.coin_price_yesterday_table2,
-                                                        conf.sql_create.coin_price_yesterday_table3],
-                                                       [conf.sql_create.coin_price_history_table,
-                                                        conf.sql_create.coin_price_history_table2,
-                                                        conf.sql_create.coin_price_history_table3],
-                                                       [conf.sql_create.coin_google_table,
-                                                        conf.sql_create.coin_google_table2,
-                                                        conf.sql_create.coin_google_table3]
+                                                       conf.sql_create.coin_information_table,
+                                                       conf.sql_create.coin_price_today_table,
+                                                       conf.sql_create.coin_price_yesterday_table,
+                                                       conf.sql_create.coin_price_history_table,
+                                                       conf.sql_create.coin_google_table
                                                        ])
 
 

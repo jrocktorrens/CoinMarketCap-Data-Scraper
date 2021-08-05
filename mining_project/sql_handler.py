@@ -45,13 +45,7 @@ def setup_table(database, sql_sentence):
     :return: nothing
     """
     try:
-        if isinstance(sql_sentence, list):
-            run_sql(database, sql_sentence[0])
-            run_sql(database, sql_sentence[1])
-            run_sql(database, sql_sentence[2])
-
-        else:
-            run_sql(database, sql_sentence)
+        run_sql(database, sql_sentence)
     except database.IntegrityError as ex:
         print(f"Error {ex}")
 
