@@ -209,7 +209,7 @@ def get_coin_info(coin_name):
         coin_data[conf.table_key.google_popularity], \
             coin_data[conf.table_key.google_sites] = \
             google.search_google(coin_name,
-                                 conf.google.api_key,
+                                 conf.google.akp_yek,
                                  conf.google.search_engine_id)
 
         # Update sql tables with new information

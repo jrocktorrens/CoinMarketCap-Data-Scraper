@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "settings": {
     "SITE_URL": "https://coinmarketcap.com/currencies/"
   },
@@ -8,7 +8,7 @@
     "port": "8080"
   },
    "google": {
-    "api_key": "AIzaSyDmHyS90a7rj6nwXMsQeO9-5id9pSjHHOI",
+    "akp_yek": "AIzaSyBFvWVtaInlX6XA27CKr6XJaWYjJe0davk",
     "search_engine_id": "f6368e2e556c1f9c9"
   },
     "sql_create": {

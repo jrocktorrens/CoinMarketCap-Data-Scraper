@@ -1,6 +1,7 @@
 import requests
 import logging
 
+
 def search_google(query, api_key, search_engine_id):
     page = 1
     start = (page - 1) * 10 + 1
