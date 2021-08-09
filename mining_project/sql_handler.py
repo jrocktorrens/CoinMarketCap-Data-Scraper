@@ -17,18 +17,23 @@ def cast(val, to_type, default=None):
         return default
 
 
-def run_sql(database, mysql_statement):
+def mysql_connect(host, user, password, database):
+    return pymysql.connect(host=host,
+                           user=user,
+                           password=password,
+                           database=database,
+                           cursorclass=pymysql.cursors.DictCursor)
+
+
+def run_sql(conf, database, mysql_statement):
     """
     Run sql statement
+    :param conf: settings file
     :param database: database name
     :param mysql_statement: the sql statement to run
     :return: sql statement output
     """
-    connection = pymysql.connect(host='localhost',
-                                 user='root',
-                                 password='root',
-                                 database=database,
-                                 cursorclass=pymysql.cursors.DictCursor)
+    connection = mysql_connect(conf.sql.host, conf.sql.user, conf.sql.password, database)
     with connection:
         with connection.cursor() as cursor:
             # Read a single record
@@ -37,20 +42,21 @@ def run_sql(database, mysql_statement):
             return cursor.fetchall()
 
 
-def setup_table(database, sql_sentence):
+def setup_table(conf, database, sql_sentence):
     """
     Create a table in not exist
+    :param conf: settings file
     :param database: database name
     :param sql_sentence: the sql sentence
     :return: nothing
     """
     try:
-        run_sql(database, sql_sentence)
+        run_sql(conf, database, sql_sentence)
     except database.IntegrityError as ex:
         print(f"Error {ex}")
 
 
-def setup_sql_database(database, sql_sentence):
+def setup_sql_database(conf, database, sql_sentence):
     """
     Setup sql database if not exist
     and then create all tables
@@ -58,27 +64,28 @@ def setup_sql_database(database, sql_sentence):
     """
     logging.info('Setting UP Database')
     # Create database in not exist
-    run_sql(None, sql_sentence[0])
+    run_sql(conf, None, sql_sentence[0])
 
     logging.info('Setting UP Tables')
 
     # Setup coins table
-    setup_table(database, sql_sentence[1])
+    setup_table(conf, database, sql_sentence[1])
     # Setup coin_information table
-    setup_table(database, sql_sentence[2])
+    setup_table(conf, database, sql_sentence[2])
     # Setup coin_price_today table
-    setup_table(database, sql_sentence[3])
+    setup_table(conf, database, sql_sentence[3])
     # Setup coin_price_yesterday table
-    setup_table(database, sql_sentence[4])
+    setup_table(conf, database, sql_sentence[4])
     # Setup coin_price_history table
-    setup_table(database, sql_sentence[5])
+    setup_table(conf, database, sql_sentence[5])
     # Setup coin_google table
-    setup_table(database, sql_sentence[6])
+    setup_table(conf, database, sql_sentence[6])
 
 
-def update_coins_table(database, coin_id, coin_name, sql_sentence):
+def update_coins_table(conf, database, coin_id, coin_name, sql_sentence):
     """
     Insert a record to coins table
+    :param conf: settings file
     :param database: the database
     :param coin_id: coin id
     :param coin_name: coin name
@@ -88,11 +95,7 @@ def update_coins_table(database, coin_id, coin_name, sql_sentence):
     logging.info('Updating coins table')
 
     try:
-        connection = pymysql.connect(host='localhost',
-                                     user='root',
-                                     password='root',
-                                     database=database,
-                                     cursorclass=pymysql.cursors.DictCursor)
+        connection = mysql_connect(conf.sql.host, conf.sql.user, conf.sql.password, database)
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (coin_id, coin_name))
@@ -104,7 +107,7 @@ def update_coins_table(database, coin_id, coin_name, sql_sentence):
         pass
 
 
-def update_coin_price_today_table(database, current_data, conf, sql_sentence):
+def update_coin_price_today_table(conf, database, current_data, sql_sentence):
     """
     Insert a record to today's coin price table
     :param database: the database
@@ -115,11 +118,7 @@ def update_coin_price_today_table(database, current_data, conf, sql_sentence):
     """
     logging.info('Updating price_today table')
     try:
-        connection = pymysql.connect(host='localhost',
-                                     user='root',
-                                     password='root',
-                                     database=database,
-                                     cursorclass=pymysql.cursors.DictCursor)
+        connection = mysql_connect(conf.sql.host, conf.sql.user, conf.sql.password, database)
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
@@ -142,7 +141,7 @@ def update_coin_price_today_table(database, current_data, conf, sql_sentence):
         pass
 
 
-def update_coin_price_yesterday_table(database, current_data, conf, sql_sentence):
+def update_coin_price_yesterday_table(conf, database, current_data, sql_sentence):
     """
     Insert a record to yesterday's coin price table
     :param database: the database
@@ -154,11 +153,7 @@ def update_coin_price_yesterday_table(database, current_data, conf, sql_sentence
     logging.info('Updating yesterday price table')
 
     try:
-        connection = pymysql.connect(host='localhost',
-                                     user='root',
-                                     password='root',
-                                     database=database,
-                                     cursorclass=pymysql.cursors.DictCursor)
+        connection = mysql_connect(conf.sql.host, conf.sql.user, conf.sql.password, database)
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
@@ -177,7 +172,7 @@ def update_coin_price_yesterday_table(database, current_data, conf, sql_sentence
         pass
 
 
-def update_coin_price_history_table(database, current_data, conf, sql_sentence):
+def update_coin_price_history_table(conf, database, current_data, sql_sentence):
     """
     Insert a record to coin's history price table
     :param database: the database
@@ -189,11 +184,7 @@ def update_coin_price_history_table(database, current_data, conf, sql_sentence):
     logging.info('Updating price history table')
 
     try:
-        connection = pymysql.connect(host='localhost',
-                                     user='root',
-                                     password='root',
-                                     database=database,
-                                     cursorclass=pymysql.cursors.DictCursor)
+        connection = mysql_connect(conf.sql.host, conf.sql.user, conf.sql.password, database)
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
@@ -214,7 +205,7 @@ def update_coin_price_history_table(database, current_data, conf, sql_sentence):
         pass
 
 
-def update_coin_information_table(database, current_data, conf, sql_sentence):
+def update_coin_information_table(conf, database, current_data, sql_sentence):
     """
     Insert a record to coin's information table
     :param database: the database
@@ -226,11 +217,7 @@ def update_coin_information_table(database, current_data, conf, sql_sentence):
     logging.info('Updating coin information table')
 
     try:
-        connection = pymysql.connect(host='localhost',
-                                     user='root',
-                                     password='root',
-                                     database=database,
-                                     cursorclass=pymysql.cursors.DictCursor)
+        connection = mysql_connect(conf.sql.host, conf.sql.user, conf.sql.password, database)
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
@@ -243,7 +230,7 @@ def update_coin_information_table(database, current_data, conf, sql_sentence):
         pass
 
 
-def update_coin_google_table(database, current_data, conf, sql_sentence):
+def update_coin_google_table(conf, database, current_data, sql_sentence):
     """
     Insert a record to coin's google table
     :param database: the database
@@ -255,11 +242,7 @@ def update_coin_google_table(database, current_data, conf, sql_sentence):
     logging.info('Updating coin google information table')
 
     try:
-        connection = pymysql.connect(host='localhost',
-                                     user='root',
-                                     password='root',
-                                     database=database,
-                                     cursorclass=pymysql.cursors.DictCursor)
+        connection = mysql_connect(conf.sql.host, conf.sql.user, conf.sql.password, database)
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql_sentence, (current_data[conf.table_key.coin_id],
@@ -273,16 +256,16 @@ def update_coin_google_table(database, current_data, conf, sql_sentence):
         pass
 
 
-def update_sql_tables(database, coin_data, conf, sql_sentence):
+def update_sql_tables(conf, database, coin_data, sql_sentence):
     """
     Update all Sql tables with all information
     :return: Nothing
     """
 
     for coin in conf.coins:
-        update_coins_table(database, conf.coins[coin], coin, sql_sentence[5])
-    update_coin_price_today_table(database, coin_data, conf, sql_sentence[0])
-    update_coin_price_yesterday_table(database, coin_data, conf, sql_sentence[1])
-    update_coin_price_history_table(database, coin_data, conf, sql_sentence[2])
-    update_coin_information_table(database, coin_data, conf, sql_sentence[3])
-    update_coin_google_table(database, coin_data, conf, sql_sentence[4])
+        update_coins_table(conf, database, conf.coins[coin], coin, sql_sentence[5])
+    update_coin_price_today_table(conf, database, coin_data, sql_sentence[0])
+    update_coin_price_yesterday_table(conf, database, coin_data, sql_sentence[1])
+    update_coin_price_history_table(conf, database, coin_data, sql_sentence[2])
+    update_coin_information_table(conf, database, coin_data, sql_sentence[3])
+    update_coin_google_table(conf, database, coin_data, sql_sentence[4])

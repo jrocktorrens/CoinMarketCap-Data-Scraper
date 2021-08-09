@@ -5,7 +5,10 @@
   },
   "sql": {
     "database": "crypto",
-    "port": "8080"
+    "port": "8080",
+    "host": "localhost",
+    "user": "root",
+    "password": "root"
   },
    "google": {
     "akp_yek": "AIzaSyBFvWVtaInlX6XA27CKr6XJaWYjJe0davk",

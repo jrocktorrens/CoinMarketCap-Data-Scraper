@@ -46,14 +46,14 @@ def init_program():
         print(f"Error! Can't find settings file! \n{ex}")
         exit(0)
 
-    sql_handler.setup_sql_database(conf.sql.database, [conf.sql_create.cypto_database,
-                                                       conf.sql_create.coins_table,
-                                                       conf.sql_create.coin_information_table,
-                                                       conf.sql_create.coin_price_today_table,
-                                                       conf.sql_create.coin_price_yesterday_table,
-                                                       conf.sql_create.coin_price_history_table,
-                                                       conf.sql_create.coin_google_table
-                                                       ])
+    sql_handler.setup_sql_database(conf, conf.sql.database, [conf.sql_create.cypto_database,
+                                                             conf.sql_create.coins_table,
+                                                             conf.sql_create.coin_information_table,
+                                                             conf.sql_create.coin_price_today_table,
+                                                             conf.sql_create.coin_price_yesterday_table,
+                                                             conf.sql_create.coin_price_history_table,
+                                                             conf.sql_create.coin_google_table
+                                                             ])
 
 
 def print_coin_headline(pre_message, post_message, coin_name):
@@ -206,16 +206,14 @@ def get_coin_info(coin_name):
         get_coin_about(coin_text)
 
         # Get google information
-        coin_data[conf.table_key.google_popularity], \
-            coin_data[conf.table_key.google_sites] = \
+        coin_data[conf.table_key.google_popularity], coin_data[conf.table_key.google_sites] = \
             google.search_google(coin_name,
                                  conf.google.akp_yek,
                                  conf.google.search_engine_id)
 
         # Update sql tables with new information
-        sql_handler.update_sql_tables(conf.sql.database,
+        sql_handler.update_sql_tables(conf, conf.sql.database,
                                       coin_data,
-                                      conf,
                                       [conf.sql_update.coin_price_today_table,
                                        conf.sql_update.coin_price_yesterday_table,
                                        conf.sql_update.coin_price_history_table,
