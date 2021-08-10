@@ -53,7 +53,7 @@ Then it will scrap the information on the page and display it on the screen.
 
 ### ERD:
 
-![alt text](https://github.com/yossigolan/data-mining-project/blob/yossi_branch/MiningProject%20.png?raw=true)
+![alt text](https://github.com/yossigolan/data-mining-project/blob/main/MiningProject.png)
 
 DataBase name: crypto
 
